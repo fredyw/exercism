@@ -1,3 +1,7 @@
+fun twofer(): String {
+    return twofer("you")
+}
+
 fun twofer(name: String): String {
-    TODO("Implement the function to complete the task")
+    return "One for $name, one for me."
 }
