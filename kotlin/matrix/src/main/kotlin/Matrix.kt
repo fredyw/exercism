@@ -1,10 +1,12 @@
 class Matrix(private val matrixAsString: String) {
+    private val matrix = matrixAsString.split('\n')
+        .map { it.split("\\s+".toRegex()).map { it.toInt() } }
 
     fun column(colNr: Int): List<Int> {
-        TODO("Implement this to complete the task")
+        return matrix.map { it[colNr - 1] }
     }
 
     fun row(rowNr: Int): List<Int> {
-        TODO("Implement this to complete the task")
+        return matrix[rowNr - 1]
     }
 }
