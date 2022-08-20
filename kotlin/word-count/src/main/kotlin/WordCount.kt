@@ -1,6 +1,10 @@
 object WordCount {
 
     fun phrase(phrase: String): Map<String, Int> {
-        TODO("Implement this function to complete the task")
+        return phrase.split("[^\\w']+".toRegex())
+            .filter { it.isNotBlank() }
+            .map { it.lowercase().trimStart('\'').trimEnd('\'') }
+            .groupingBy { it }
+            .eachCount()
     }
 }
