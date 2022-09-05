@@ -1,10 +1,7 @@
-import org.junit.Rule
-import org.junit.rules.ExpectedException
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class TransposeTest {
-
     @Test
     fun `empty string`() {
         val lines = listOf<String>()
