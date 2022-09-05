@@ -1,7 +1,9 @@
+import kotlin.math.pow
+
 object ArmstrongNumber {
-
     fun check(input: Int): Boolean {
-        TODO("Implement the function to complete the task")
+        return input.toString().run {
+            input == sumOf { it.digitToInt().toDouble().pow(length) }.toInt()
+        }
     }
-
 }
