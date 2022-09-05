@@ -3,7 +3,6 @@ import kotlin.test.assertEquals
 import Color.*
 
 class ResistorColorTrioTest {
-
     @Test
     fun `orange orange black`() = assertEquals("33 ohms", ResistorColorTrio.text(ORANGE, ORANGE, BLACK))
 
