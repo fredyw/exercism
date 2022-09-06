@@ -5,6 +5,10 @@ class Series(private val num: String) {
 
     fun getLargestProduct(span: Int): Long {
         require(num.length >= span && span >= 0)
-        TODO("Implement this function to complete the task")
+        return (0..num.length - span).maxOf {
+            num.substring(it, it + span).fold(1L) { acc, c ->
+                acc * c.digitToInt()
+            }
+        }
     }
 }
