@@ -1,9 +1,15 @@
-class Dna {
-
-    // TODO: Implement proper constructor
+class Dna(private val dna: String) {
+    init {
+        require(dna.all { it == 'A' || it == 'C' || it == 'G' || it == 'T' })
+    }
 
     val nucleotideCounts: Map<Char, Int>
         get() {
-            TODO("Implement this function to complete the task")
+            return mapOf(
+                'A' to 0,
+                'C' to 0,
+                'G' to 0,
+                'T' to 0,
+            ) + dna.groupingBy { it }.eachCount()
         }
 }
