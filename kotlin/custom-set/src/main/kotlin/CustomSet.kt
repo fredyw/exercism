@@ -1,40 +1,44 @@
-class CustomSet() {
+class CustomSet(set: Set<Int>) {
+    constructor(vararg elements: Int) : this(elements.toSet())
 
-    // TODO: implement proper constructor
+    private val set = set.toMutableSet()
 
     fun isEmpty(): Boolean {
-        TODO("Implement this function to complete the task")
+        return set.isEmpty()
     }
 
     fun isSubset(other: CustomSet): Boolean {
-        TODO("Implement this function to complete the task")
+        return other.set.containsAll(set)
     }
 
     fun isDisjoint(other: CustomSet): Boolean {
-        TODO("Implement this function to complete the task")
+        return set.intersect(other.set).isEmpty()
     }
 
     fun contains(other: Int): Boolean {
-        TODO("Implement this function to complete the task")
+        return set.contains(other)
     }
 
     fun intersection(other: CustomSet): CustomSet {
-        TODO("Implement this function to complete the task")
+        return CustomSet(set.intersect(other.set).toSet())
     }
 
     fun add(other: Int) {
-        TODO("Implement this function to complete the task")
+        set.add(other)
     }
 
     override fun equals(other: Any?): Boolean {
-        TODO("Implement this function to complete the task")
+        return when (other) {
+            is CustomSet -> set == other.set
+            else -> false
+        }
     }
 
     operator fun plus(other: CustomSet): CustomSet {
-        TODO("Implement this function to complete the task")
+        return CustomSet((set + other.set).toSet())
     }
 
     operator fun minus(other: CustomSet): CustomSet {
-        TODO("Implement this function to complete the task")
+        return CustomSet((set - other.set).toSet())
     }
 }
