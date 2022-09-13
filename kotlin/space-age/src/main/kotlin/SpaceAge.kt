@@ -1,13 +1,19 @@
-class SpaceAge {
+import java.math.BigDecimal
+import java.math.RoundingMode
 
-    // TODO: Implement proper constructor
+class SpaceAge(private val age: Int) {
+    fun onEarth(): Double = (age / SECONDS_IN_EARTH).roundToTwoDecimal()
+    fun onMercury(): Double = (age / 0.2408467 / SECONDS_IN_EARTH).roundToTwoDecimal()
+    fun onVenus(): Double = (age / 0.61519726 / SECONDS_IN_EARTH).roundToTwoDecimal()
+    fun onMars(): Double = (age / 1.8808158 / SECONDS_IN_EARTH).roundToTwoDecimal()
+    fun onJupiter(): Double = (age / 11.862615 / SECONDS_IN_EARTH).roundToTwoDecimal()
+    fun onSaturn(): Double = (age / 29.447498 / SECONDS_IN_EARTH).roundToTwoDecimal()
+    fun onUranus(): Double = (age / 84.016846 / SECONDS_IN_EARTH).roundToTwoDecimal()
+    fun onNeptune(): Double = (age / 164.79132 / SECONDS_IN_EARTH).roundToTwoDecimal()
 
-    fun onEarth(): Double = TODO("Implement this function to complete the task")
-    fun onMercury(): Double = TODO("Implement this function to complete the task")
-    fun onVenus(): Double = TODO("Implement this function to complete the task")
-    fun onMars(): Double = TODO("Implement this function to complete the task")
-    fun onJupiter(): Double = TODO("Implement this function to complete the task")
-    fun onSaturn(): Double = TODO("Implement this function to complete the task")
-    fun onUranus(): Double = TODO("Implement this function to complete the task")
-    fun onNeptune(): Double = TODO("Implement this function to complete the task")
+    companion object {
+        private const val SECONDS_IN_EARTH = (31_557_600).toDouble()
+        private fun Double.roundToTwoDecimal() =
+            BigDecimal(this).setScale(2, RoundingMode.HALF_UP).toDouble()
+    }
 }
