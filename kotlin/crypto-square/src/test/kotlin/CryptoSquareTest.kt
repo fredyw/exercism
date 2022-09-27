@@ -1,9 +1,7 @@
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 
 class CryptoSquareTest {
-
     @Test
     fun `empty plaintext results in empty ciphertext`() {
         val plaintext = ""
