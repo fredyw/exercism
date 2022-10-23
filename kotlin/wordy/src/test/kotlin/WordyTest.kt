@@ -1,10 +1,7 @@
-import org.junit.Rule
-import org.junit.rules.ExpectedException
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class WordyTest {
-
     @Test
     fun `just a number`() = assertEquals(5, Wordy.answer("What is 5?"))
 
