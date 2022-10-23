@@ -2,7 +2,7 @@ import kotlin.math.pow
 
 object Wordy {
     fun answer(input: String): Int {
-        var answer =
+        val initial =
             ("What is (-?\\d+)" +
                     "(?: " +
                     "plus -?\\d+" +
@@ -18,12 +18,9 @@ object Wordy {
                     "|divided by -?\\d+" +
                     "|raised to the \\d+(?:st|nd|rd|th) power"
                     ).toRegex()
-        var match = opRegex.find(input, 0)
-        while (match != null) {
-            answer = evaluate(answer, match.value)
-            match = opRegex.find(input, match.range.last + 1)
-        }
-        return answer
+        return generateSequence(opRegex.find(input)) { opRegex.find(input, it.range.last + 1) }
+            .map { it.value }
+            .fold(initial) { acc, s -> evaluate(acc, s) }
     }
 
     private fun evaluate(num: Int, s: String): Int {
