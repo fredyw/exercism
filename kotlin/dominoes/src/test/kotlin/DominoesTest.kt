@@ -1,10 +1,7 @@
-import org.junit.Rule
-import org.junit.rules.ExpectedException
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class DominoesTest {
-
     @Test
     fun `empty input = empty output`() = Dominoes.formChain().should { haveSize(0) }
 
