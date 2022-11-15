@@ -8,7 +8,7 @@ class Forth {
                 val name = tokens[1]
                 require(name.toIntOrNull() == null) { "illegal operation" }
                 userDefinedWords[name] =
-                    flatten(tokens.subList(2, tokens.lastIndex), userDefinedWords)
+                    evaluate(tokens.subList(2, tokens.lastIndex), userDefinedWords)
             } else {
                 evaluate(
                     it.split(" ")
@@ -20,14 +20,14 @@ class Forth {
         return deque.toList()
     }
 
-    private fun flatten(
+    private fun evaluate(
         tokens: List<String>,
         userDefinedWords: Map<String, List<String>>
     ): List<String> {
         return tokens.flatMap {
             val body = userDefinedWords[it]
             if (body != null) {
-                flatten(body, userDefinedWords)
+                evaluate(body, userDefinedWords)
             } else {
                 listOf(it)
             }
