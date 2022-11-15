@@ -2,45 +2,41 @@ class Forth {
     fun evaluate(vararg line: String): List<Int> {
         val deque = ArrayDeque<Int>()
         val functions = mutableMapOf<String, List<String>>()
-        for (l in line.map { it.lowercase() }) {
-            if (l.startsWith(":")) {
-                val split = l.split(" ")
-                require(split[1].toIntOrNull() == null) { "illegal operation" }
-                functions[split[1]] =
-                    evaluateFunction(split.subList(2, split.lastIndex), functions)
+        line.map { it.lowercase() }.forEach {
+            if (it.startsWith(":")) {
+                val tokens = it.split(" ")
+                val functionName = tokens[1]
+                require(functionName.toIntOrNull() == null) { "illegal operation" }
+                functions[functionName] =
+                    flatten(tokens.subList(2, tokens.lastIndex), functions)
             } else {
-                evaluate(l, deque, functions)
+                evaluate(it.split(" ").flatMap { functions[it] ?: listOf(it) }, deque)
             }
         }
         return deque.toList()
     }
 
-    private fun evaluateFunction(
+    private fun flatten(
         tokens: List<String>,
         functions: Map<String, List<String>>
     ): List<String> {
         return tokens.flatMap {
             val body = functions[it]
             if (body != null) {
-                evaluateFunction(body, functions)
+                flatten(body, functions)
             } else {
                 listOf(it)
             }
         }
     }
 
-    private fun evaluate(
-        line: String,
-        deque: ArrayDeque<Int>,
-        functions: Map<String, List<String>>
-    ) {
-        val tokens = line.split(" ").flatMap { functions[it] ?: listOf(it) }
-        for (token in tokens) {
-            val num = token.toIntOrNull()
+    private fun evaluate(tokens: List<String>, deque: ArrayDeque<Int>) {
+        tokens.forEach {
+            val num = it.toIntOrNull()
             if (num != null) {
                 deque.addLast(num)
             } else {
-                when (token.lowercase()) {
+                when (it.lowercase()) {
                     "+" -> add(deque)
                     "-" -> subtract(deque)
                     "*" -> multiply(deque)
@@ -58,68 +54,61 @@ class Forth {
 
     }
 
-    private fun add(deque: ArrayDeque<Int>): ArrayDeque<Int> {
+    private fun add(deque: ArrayDeque<Int>) {
         require(!deque.isEmpty()) { "empty stack" }
         require(deque.size > 1) { "only one value on the stack" }
         val b = deque.removeLast()
         val a = deque.removeLast()
         deque.addLast(a + b)
-        return deque
     }
 
-    private fun subtract(deque: ArrayDeque<Int>): ArrayDeque<Int> {
+    private fun subtract(deque: ArrayDeque<Int>) {
         require(!deque.isEmpty()) { "empty stack" }
         require(deque.size > 1) { "only one value on the stack" }
         val b = deque.removeLast()
         val a = deque.removeLast()
         deque.addLast(a - b)
-        return deque
     }
 
-    private fun multiply(deque: ArrayDeque<Int>): ArrayDeque<Int> {
+    private fun multiply(deque: ArrayDeque<Int>) {
         require(!deque.isEmpty()) { "empty stack" }
         require(deque.size > 1) { "only one value on the stack" }
         val b = deque.removeLast()
         val a = deque.removeLast()
         deque.addLast(a * b)
-        return deque
     }
 
-    private fun divide(deque: ArrayDeque<Int>): ArrayDeque<Int> {
+    private fun divide(deque: ArrayDeque<Int>) {
         require(!deque.isEmpty()) { "empty stack" }
         require(deque.size > 1) { "only one value on the stack" }
         val b = deque.removeLast()
         require(b != 0) { "divide by zero " }
         val a = deque.removeLast()
         deque.addLast(a / b)
-        return deque
     }
 
-    private fun dup(deque: ArrayDeque<Int>): ArrayDeque<Int> {
+    private fun dup(deque: ArrayDeque<Int>) {
         require(!deque.isEmpty()) { "empty stack" }
         val a = deque.removeLast()
         deque.addLast(a)
         deque.addLast(a)
-        return deque
     }
 
-    private fun swap(deque: ArrayDeque<Int>): ArrayDeque<Int> {
+    private fun swap(deque: ArrayDeque<Int>) {
         require(!deque.isEmpty()) { "empty stack" }
         require(deque.size > 1) { "only one value on the stack" }
         val b = deque.removeLast()
         val a = deque.removeLast()
         deque.addLast(b)
         deque.addLast(a)
-        return deque
     }
 
-    private fun drop(deque: ArrayDeque<Int>): ArrayDeque<Int> {
+    private fun drop(deque: ArrayDeque<Int>) {
         require(!deque.isEmpty()) { "empty stack" }
         deque.removeLast()
-        return deque
     }
 
-    private fun over(deque: ArrayDeque<Int>): ArrayDeque<Int> {
+    private fun over(deque: ArrayDeque<Int>) {
         require(!deque.isEmpty()) { "empty stack" }
         require(deque.size > 1) { "only one value on the stack" }
         val a = deque.removeLast()
@@ -127,6 +116,5 @@ class Forth {
         deque.addLast(b)
         deque.addLast(a)
         deque.addLast(b)
-        return deque
     }
 }
