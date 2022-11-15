@@ -1,16 +1,20 @@
 class Forth {
     fun evaluate(vararg line: String): List<Int> {
         val deque = ArrayDeque<Int>()
-        val functions = mutableMapOf<String, List<String>>()
+        val userDefinedWords = mutableMapOf<String, List<String>>()
         line.map { it.lowercase() }.forEach {
             if (it.startsWith(":")) {
                 val tokens = it.split(" ")
-                val functionName = tokens[1]
-                require(functionName.toIntOrNull() == null) { "illegal operation" }
-                functions[functionName] =
-                    flatten(tokens.subList(2, tokens.lastIndex), functions)
+                val name = tokens[1]
+                require(name.toIntOrNull() == null) { "illegal operation" }
+                userDefinedWords[name] =
+                    flatten(tokens.subList(2, tokens.lastIndex), userDefinedWords)
             } else {
-                evaluate(it.split(" ").flatMap { functions[it] ?: listOf(it) }, deque)
+                evaluate(
+                    it.split(" ")
+                        .flatMap { token -> userDefinedWords[token] ?: listOf(token) },
+                    deque
+                )
             }
         }
         return deque.toList()
@@ -18,12 +22,12 @@ class Forth {
 
     private fun flatten(
         tokens: List<String>,
-        functions: Map<String, List<String>>
+        userDefinedWords: Map<String, List<String>>
     ): List<String> {
         return tokens.flatMap {
-            val body = functions[it]
+            val body = userDefinedWords[it]
             if (body != null) {
-                flatten(body, functions)
+                flatten(body, userDefinedWords)
             } else {
                 listOf(it)
             }
