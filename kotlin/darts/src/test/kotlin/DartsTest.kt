@@ -2,7 +2,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class DartsTest {
-
     @Test
     fun `missed target`() = assertEquals(0, Darts.score(-9, 9))
 
