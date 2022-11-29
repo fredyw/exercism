@@ -1,9 +1,7 @@
 import org.junit.Assert.assertArrayEquals
-import org.junit.Ignore
 import org.junit.Test
 
 class SpiralMatrixTest {
-
     @Test
     fun testEmptySpiral() {
         val expected = emptyArray<IntArray>()
@@ -11,7 +9,6 @@ class SpiralMatrixTest {
         assertArrayEquals(expected, SpiralMatrix.ofSize(0))
     }
 
-    @Ignore
     @Test
     fun testTrivialSpiral() {
         val expected = arrayOf(
@@ -21,7 +18,6 @@ class SpiralMatrixTest {
         assertArrayEquals(expected, SpiralMatrix.ofSize(1))
     }
 
-    @Ignore
     @Test
     fun testSpiralOfSize2() {
         val expected = arrayOf(
@@ -32,7 +28,6 @@ class SpiralMatrixTest {
         assertArrayEquals(expected, SpiralMatrix.ofSize(2))
     }
 
-    @Ignore
     @Test
     fun testSpiralOfSize3() {
         val expected = arrayOf(
@@ -44,7 +39,6 @@ class SpiralMatrixTest {
         assertArrayEquals(expected, SpiralMatrix.ofSize(3))
     }
 
-    @Ignore
     @Test
     fun testSpiralOfSize4() {
         val expected = arrayOf(
@@ -57,7 +51,6 @@ class SpiralMatrixTest {
         assertArrayEquals(expected, SpiralMatrix.ofSize(4))
     }
 
-    @Ignore
     @Test
     fun testSpiralOfSize5() {
         val expected = arrayOf(
@@ -70,5 +63,4 @@ class SpiralMatrixTest {
 
         assertArrayEquals(expected, SpiralMatrix.ofSize(5))
     }
-
 }
