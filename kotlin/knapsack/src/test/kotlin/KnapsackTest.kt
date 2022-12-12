@@ -2,7 +2,6 @@ import org.junit.Test
 import kotlin.test.assertEquals
 
 class KnapsackTest {
-
     @Test
     fun `no items`() = assertEquals(0, knapsack(100, listOf()))
 
