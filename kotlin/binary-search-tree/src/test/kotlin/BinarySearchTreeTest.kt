@@ -3,7 +3,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 class BinarySearchTreeTest {
-
     @Test
     fun `data is retained`() {
         val tree = BinarySearchTree<Int>()
