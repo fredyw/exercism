@@ -1,9 +1,7 @@
 import org.junit.Test
-import org.junit.Ignore
 import kotlin.test.assertEquals
 
 class ETLTest {
-
     @Test
     fun `single letter`() = assertTransformedEquals(
             mapOf(
@@ -11,7 +9,6 @@ class ETLTest {
             mapOf(
                     'a' to 1))
 
-    @Ignore
     @Test
     fun `single score with multiple letters`() = assertTransformedEquals(
             mapOf(
@@ -19,7 +16,6 @@ class ETLTest {
             mapOf(
                     'a' to 1, 'e' to 1, 'i' to 1, 'o' to 1, 'u' to 1))
 
-    @Ignore
     @Test
     fun `multiple scores with multiple letters`() = assertTransformedEquals(
             mapOf(
@@ -27,7 +23,6 @@ class ETLTest {
             mapOf(
                     'a' to 1, 'd' to 2, 'e' to 1, 'g' to 2))
 
-    @Ignore
     @Test
     fun `multiple scores with differing numbers of letters`() =
             assertTransformedEquals(

@@ -1,5 +1,7 @@
 object ETL {
     fun transform(source: Map<Int, Collection<Char>>): Map<Char, Int> {
-        TODO("Implement the function to complete the task")
+        return source.map { (score, letters) ->
+            letters.map { it.lowercaseChar() }.associateWith { score }
+        }.reduce { acc, map -> acc + map }
     }
 }
