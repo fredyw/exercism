@@ -1,5 +1,4 @@
 import org.junit.Test
-import org.junit.Ignore
 import org.junit.experimental.runners.Enclosed
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
@@ -7,10 +6,8 @@ import kotlin.test.assertEquals
 
 @RunWith(Enclosed::class)
 class AtbashTest {
-
     @RunWith(Parameterized::class)
     class EncodeTest(val input: String, val expectedOutput: String) {
-
         companion object {
             @JvmStatic
             @Parameterized.Parameters (name = "{index}: encode({0}) = {1}")
@@ -30,12 +27,10 @@ class AtbashTest {
         fun test() {
             assertEquals(expectedOutput, Atbash.encode(input))
         }
-
     }
 
     @RunWith(Parameterized::class)
     class DecodeTest(val input: String, val expectedOutput: String) {
-
         companion object {
             @JvmStatic
             @Parameterized.Parameters(name = "{index}: decode({0}) = {1}")
@@ -49,12 +44,9 @@ class AtbashTest {
             )
         }
 
-        @Ignore
         @Test
         fun test() {
             assertEquals(expectedOutput, Atbash.decode(input))
         }
-
     }
-
 }
