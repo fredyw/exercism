@@ -3,7 +3,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 class AffineCipherTest {
-
     @Test
     fun `encode yes`() = assertEquals("xbt", AffineCipher.encode("yes", 5, 7))
 
