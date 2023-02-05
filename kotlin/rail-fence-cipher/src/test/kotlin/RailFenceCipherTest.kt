@@ -1,9 +1,7 @@
-import org.junit.Ignore
 import org.junit.Test
 import kotlin.test.assertEquals
 
 class RailFenceCipherTest {
-
     @Test
     fun encodeWithTwoRails() {
         val railFenceCipher = RailFenceCipher(2)
@@ -13,7 +11,6 @@ class RailFenceCipherTest {
         )
     }
 
-    @Ignore
     @Test
     fun encodeWithThreeRails() {
         val railFenceCipher = RailFenceCipher(3)
@@ -23,7 +20,6 @@ class RailFenceCipherTest {
         )
     }
 
-    @Ignore
     @Test
     fun encodeWithEndingInTheMiddle() {
         val railFenceCipher = RailFenceCipher(4)
@@ -33,7 +29,6 @@ class RailFenceCipherTest {
         )
     }
 
-    @Ignore
     @Test
     fun decodeWithThreeRails() {
         val railFenceCipher = RailFenceCipher(3)
@@ -43,7 +38,6 @@ class RailFenceCipherTest {
         )
     }
 
-    @Ignore
     @Test
     fun decodeWithFiveRails() {
         val railFenceCipher = RailFenceCipher(5)
@@ -53,7 +47,6 @@ class RailFenceCipherTest {
         );
     }
 
-    @Ignore
     @Test
     fun decodeWithSixRails() {
         val railFenceCipher = RailFenceCipher(6)
