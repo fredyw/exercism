@@ -1,5 +1,5 @@
 fun <T> List<T>.customAppend(list: List<T>): List<T> {
-    return this + list
+    return list.customFoldLeft(this) { acc, e -> acc + e }
 }
 
 fun List<Any>.customConcat(): List<Any> {
@@ -27,14 +27,7 @@ fun <T, U> List<T>.customMap(transform: (T) -> U): List<U> {
 }
 
 fun <T, U> List<T>.customFoldLeft(initial: U, f: (U, T) -> U): U {
-    tailrec fun f(index: Int, acc: U): U {
-        if (index == this.size) {
-            return acc
-        }
-        return f(index + 1, f(acc, this[index]))
-    }
-
-    return f(0, initial)
+    return if (isEmpty()) initial else { drop(1).customFoldLeft(f(initial, first()), f) }
 }
 
 fun <T, U> List<T>.customFoldRight(initial: U, f: (T, U) -> U): U {
