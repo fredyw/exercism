@@ -5,7 +5,6 @@ import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 
 class DiffieHellmanTest {
-
     @Test
     fun `private key is in range from 1 to prime`() {
         val prime = 23.toBigInteger()
@@ -66,5 +65,4 @@ class DiffieHellmanTest {
 
         assertEquals(secretA, secretB)
     }
-
 }

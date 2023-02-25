@@ -1,16 +1,18 @@
 import java.math.BigInteger
+import java.util.*
 
 object DiffieHellman {
-
     fun privateKey(prime: BigInteger): BigInteger {
-        TODO("Implement the function to complete the task")
+        return generateSequence {
+            BigInteger(prime.bitLength(), Random())
+        }.first { it >= BigInteger.ONE && it < prime }
     }
 
     fun publicKey(p: BigInteger, g: BigInteger, privKey: BigInteger): BigInteger {
-        TODO("Implement the function to complete the task")
+        return g.modPow(privKey, p)
     }
 
     fun secret(prime: BigInteger, publicKey: BigInteger, privateKey: BigInteger): BigInteger {
-        TODO("Implement the function to complete the task")
+        return publicKey.modPow(privateKey, prime)
     }
 }
