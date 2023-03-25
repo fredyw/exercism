@@ -40,28 +40,40 @@ class ZebraPuzzle() {
     )
 
     private val solution: Solution = let {
-        for (colors in permutations<Color>()
-            .filter { color -> color.colorRules() }) {
-            for (nationalities in permutations<Nationality>()
-                .filter { nationalities -> nationalities.nationalityRules(colors) }) {
-                for (pets in permutations<Pet>()
-                    .filter { pets -> pets.petRules(nationalities) }) {
-                    for (drinks in permutations<Drink>()
-                        .filter { drinks -> drinks.drinkRules(colors, nationalities)
-                    }) for (smokes in permutations<Smoke>()
-                        .filter { smokes -> smokes.smokeRules(colors, nationalities, drinks, pets) }) {
-                        return@let Solution(
-                            colors,
-                            nationalities,
-                            pets,
-                            drinks,
-                            smokes,
-                        )
+        permutations<Color>()
+            .filter { it.colorRules() }
+            .flatMap { colors ->
+                permutations<Nationality>()
+                    .filter { it.nationalityRules(colors) }
+                    .flatMap { nationalities ->
+                        permutations<Pet>()
+                            .filter { it.petRules(nationalities) }
+                            .flatMap { pets ->
+                                permutations<Drink>()
+                                    .filter { it.drinkRules(colors, nationalities) }
+                                    .flatMap { drinks ->
+                                        permutations<Smoke>()
+                                            .filter {
+                                                it.smokeRules(
+                                                    colors,
+                                                    nationalities,
+                                                    drinks,
+                                                    pets
+                                                )
+                                            }
+                                            .map { smoke ->
+                                                Solution(
+                                                    colors,
+                                                    nationalities,
+                                                    pets,
+                                                    drinks,
+                                                    smoke
+                                                )
+                                            }
+                                    }
+                            }
                     }
-                }
-            }
-        }
-        throw Exception("No solution")
+            }.first()
     }
 
     private fun List<Color>.colorRules(): Boolean {
