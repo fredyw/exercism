@@ -164,7 +164,6 @@ class ReactTest {
 
         assertEquals(listOf<Int>(), vals)
     }
-
 }
 
 /*
