@@ -4,7 +4,7 @@ class Reactor<T> {
     abstract class Cell<T> {
         abstract var value: T
 
-        val computeCells: MutableList<Reactor<T>.ComputeCell> = mutableListOf()
+        var computeCell: Reactor<T>.ComputeCell? = null
     }
 
     inner class InputCell(private var _value: T) : Cell<T>() {
@@ -15,40 +15,35 @@ class Reactor<T> {
         override var value: T
             get() = _value
             set(value) {
+                val tmp = this.value
                 this._value = value
-                computeCells.forEach { cell ->
-                    cell.value.also { v ->
-                        if (v != value) {
-                            cell.callbacks.forEach { f -> f(v) }
-                        }
+                if (computeCell != null) {
+                    val cell: ComputeCell = computeCell!!
+                    if (cell.value != cell.compute(listOf(tmp))) {
+                        cell.callbacks.forEach { it(cell.value) }
                     }
                 }
             }
     }
 
     inner class ComputeCell(private vararg val cells: Cell<T>,
-                            private val f: (List<T>) -> T) : Cell<T>() {
+                            val compute: (List<T>) -> T) : Cell<T>() {
         val callbacks: MutableList<(T) -> Unit> = mutableListOf()
 
         override var value: T
-            get() = compute()
+            get() =  compute(cells.map { it.value }.toList())
             set(_) =
                 throw UnsupportedOperationException()
 
         fun addCallback(f: (T) -> Unit): Subscription {
             callbacks += f
-            cells.forEach { it.computeCells += this }
+            cells.forEach { it.computeCell = this }
             return object : Subscription {
                 override fun cancel() {
                     callbacks -= f
-//                    cells.forEach { it.computeCells -= this }
+                    cells.forEach { it.computeCell = null }
                 }
-
             }
-        }
-
-        fun compute(): T {
-            return f(cells.map { it.value }.toList())
         }
     }
 
