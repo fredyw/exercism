@@ -35,13 +35,12 @@ class Reactor<T> {
             set(_) =
                 throw UnsupportedOperationException()
 
-        fun addCallback(f: (T) -> Unit): Subscription {
-            callbacks += f
+        fun addCallback(callback: (T) -> Unit): Subscription {
+            callbacks += callback
             cells.forEach { it.computeCell = this }
             return object : Subscription {
                 override fun cancel() {
-                    callbacks -= f
-                    cells.forEach { it.computeCell = null }
+                    callbacks -= callback
                 }
             }
         }
