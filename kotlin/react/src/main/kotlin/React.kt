@@ -1,43 +1,48 @@
+import kotlin.properties.Delegates
+
 class Reactor<T> {
     // Your compute cell's addCallback method must return an object
     // that implements the Subscription interface.
-    sealed interface Cell<T> {
-        var value: T
+    sealed class Cell<T> {
+        abstract var value: T
+        val observers = mutableListOf<Reactor<T>.ComputeCell>()
     }
 
-    inner class InputCell(private var initialValue: T) : Cell<T> {
-        var computeCell: Reactor<T>.ComputeCell? = null
+    inner class InputCell(private var initialValue: T) : Cell<T>() {
+        override var value by Delegates.observable(initialValue) { _, old, new ->
+            if (old != new) {
+                observers.forEach { it.inform() }
+            }
+        }
+    }
 
-        operator fun invoke(value: T) {
-            this.value = value
+    inner class ComputeCell(
+        private vararg val cells: Cell<T>,
+        private val compute: (List<T>) -> T
+    ) : Cell<T>() {
+        init {
+            cells.forEach { it.observers += this }
         }
 
+        private var previousValue: T = value
+        private val callbacks: MutableList<(T) -> Unit> = mutableListOf()
+
         override var value: T
-            get() = initialValue
+            get() = computeValue()
             set(value) {
-                var prevValue: T? = null
-                if (computeCell != null) {
-                    prevValue = computeCell!!.value
-                }
-                this.initialValue = value
-                if (computeCell != null) {
-                    val cell: ComputeCell = computeCell!!
-                    if (cell.value != prevValue) {
-                        cell.callbacks.forEach { it(cell.value) }
-                    }
+                if (previousValue != value) {
+                    previousValue = value
+                    callbacks.forEach { it(value) }
+                    observers.forEach { it.inform() }
                 }
             }
-    }
 
-    inner class ComputeCell(private vararg val cells: Cell<T>,
-                            compute: (List<T>) -> T) : Cell<T> {
-        val callbacks: MutableList<(T) -> Unit> = mutableListOf()
-
-        override var value: T = compute(cells.map { it.value }.toList())
+        fun inform() {
+            value = computeValue()
+        }
 
         fun addCallback(callback: (T) -> Unit): Subscription {
             callbacks += callback
-            addCallback(callback, this)
             return object : Subscription {
                 override fun cancel() {
                     callbacks -= callback
@@ -45,14 +50,7 @@ class Reactor<T> {
             }
         }
 
-        private fun addCallback(callback: (T) -> Unit, computeCell: ComputeCell) {
-            cells.forEach {
-                when (it) {
-                    is ComputeCell -> it.addCallback(callback, computeCell)
-                    is InputCell -> it.computeCell = computeCell
-                }
-            }
-        }
+        private fun computeValue() = compute(cells.map { it.value }.toList())
     }
 
     interface Subscription {
