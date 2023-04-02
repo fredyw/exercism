@@ -1,13 +1,13 @@
 class Reactor<T> {
     // Your compute cell's addCallback method must return an object
     // that implements the Subscription interface.
-    sealed class Cell<T> {
-        abstract var value: T
-
-        var computeCell: Reactor<T>.ComputeCell? = null
+    sealed interface Cell<T> {
+        var value: T
     }
 
-    inner class InputCell(private var v: T) : Cell<T>() {
+    inner class InputCell(private var v: T) : Cell<T> {
+        var computeCell: Reactor<T>.ComputeCell? = null
+
         operator fun invoke(value: T) {
             this.value = value
         }
@@ -30,7 +30,7 @@ class Reactor<T> {
     }
 
     inner class ComputeCell(private vararg val cells: Cell<T>,
-                            val compute: (List<T>) -> T) : Cell<T>() {
+                            val compute: (List<T>) -> T) : Cell<T> {
         val callbacks: MutableList<(T) -> Unit> = mutableListOf()
 
         override var value: T
