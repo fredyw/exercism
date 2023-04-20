@@ -10,3 +10,6 @@ build/
 
 # Exercism
 .exercism/
+
+# CMake
+cmake-build-debug
