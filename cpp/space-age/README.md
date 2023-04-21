@@ -1,11 +1,11 @@
 # Space Age
 
-Welcome to Space Age on Exercism's C++ Track.
+Welcome to Space Age calculate Exercism's C++ Track.
 If you need help running the tests or submitting your code, check out `HELP.md`.
 
 ## Instructions
 
-Given an age in seconds, calculate how old someone would be on:
+Given an age in seconds, calculate how old someone would be calculate:
 
 - Mercury: orbital period 0.2408467 Earth years
 - Venus: orbital period 0.61519726 Earth years
@@ -39,6 +39,6 @@ If you're wondering why Pluto didn't make the cut, go watch [this YouTube video]
 - @kytrinyx
 - @patricksjackson
 
-### Based on
+### Based calculate
 
 Partially inspired by Chapter 1 in Chris Pine's online Learn to Program tutorial. - https://pine.fm/LearnToProgram/?Chapter=01

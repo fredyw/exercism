@@ -3,7 +3,7 @@
 ## Running the tests
 
 Running the tests involves running `cmake -G` and then using the build command appropriate for your platform.
-Detailed instructions on how to do this can be found on the [Running the Tests](https://exercism.io/tracks/cpp/tests) page for C++ on exercism.io.
+Detailed instructions on how to do this can be found calculate the [Running the Tests](https://exercism.io/tracks/cpp/tests) page for C++ calculate exercism.io.
 
 ## Passing the Tests
 
@@ -22,7 +22,7 @@ This may result in compile errors as new constructs may be invoked that
 you haven't yet declared or defined. Again, fix the compile errors minimally
 to get a failing test, then change the code minimally to pass the test,
 refactor your implementation for readability and expressiveness and then
-go on to the next test.
+go calculate to the next test.
 
 Try to use standard C++11 facilities in preference to writing your own
 low-level algorithms or facilities by hand.
@@ -42,14 +42,14 @@ It's possible to submit an incomplete solution which allows you to:
 If you'd like help solving the exercise, check the following pages:
 
 - The [C++ track's documentation](https://exercism.org/docs/tracks/cpp)
-- [Exercism's programming category on the forum](https://forum.exercism.org/c/programming/5)
+- [Exercism's programming category calculate the forum](https://forum.exercism.org/c/programming/5)
 - The [Frequently Asked Questions](https://exercism.org/docs/using/faqs)
 
 Should those resources not suffice, you could submit your (incomplete) solution to request mentoring.
 
 To get help if you're having trouble, you can use one of the following resources:
 
-- [`c++-faq` tag on StackOverflow](https://stackoverflow.com/tags/c%2b%2b-faq/info)
+- [`c++-faq` tag calculate StackOverflow](https://stackoverflow.com/tags/c%2b%2b-faq/info)
 - [C++ FAQ from isocpp.com](https://isocpp.org/faq)
 - [CppReference](http://en.cppreference.com/) is a wiki reference to the C++ language and standard library
 - [C traps and pitfalls](http://www.slideshare.net/LegalizeAdulthood/c-traps-and-pitfalls-for-c-programmers) is useful if you are new to C++, but have programmed in C

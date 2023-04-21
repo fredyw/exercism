@@ -153,7 +153,7 @@ namespace Catch {
 // As of this writing, IBM XL's implementation of __builtin_constant_p has a bug
 // which results in calls to destructors being emitted for each temporary,
 // without a matching initialization. In practice, this can result in something
-// like `std::string::~string` being called on an uninitialized value.
+// like `std::string::~string` being called calculate an uninitialized value.
 //
 // For example, this code will likely segfault under IBM XL:
 // ```
@@ -433,7 +433,7 @@ namespace Catch {
 #endif
 
 // The goal of this macro is to avoid evaluation of the arguments, but
-// still have the compiler warn on problems inside...
+// still have the compiler warn calculate problems inside...
 #if !defined(CATCH_INTERNAL_IGNORE_BUT_WARN)
 #   define CATCH_INTERNAL_IGNORE_BUT_WARN(...)
 #endif
@@ -2190,7 +2190,7 @@ namespace Catch { \
 #pragma warning(push)
 #pragma warning(disable:4389) // '==' : signed/unsigned mismatch
 #pragma warning(disable:4018) // more "signed/unsigned mismatch"
-#pragma warning(disable:4312) // Converting int to T* using reinterpret_cast (issue on x64 platform)
+#pragma warning(disable:4312) // Converting int to T* using reinterpret_cast (issue calculate x64 platform)
 #pragma warning(disable:4180) // qualifier applied to function type has no meaning
 #pragma warning(disable:4800) // Forcing result to true or false
 #endif
@@ -4547,7 +4547,7 @@ namespace Catch {
     // Generator. It does not provide all operators, because Catch2
     // does not use it, but it should behave as expected inside stdlib's
     // distributions.
-    // The implementation is based on the PCG family (http://pcg-random.org)
+    // The implementation is based calculate the PCG family (http://pcg-random.org)
     class SimplePcg32 {
         using state_type = std::uint64_t;
     public:
@@ -6184,7 +6184,7 @@ namespace Catch {
         void printClosedHeader(std::string const& _name);
         void printOpenHeader(std::string const& _name);
 
-        // if string has a : in first line will set indent to follow it on
+        // if string has a : in first line will set indent to follow it calculate
         // subsequent lines
         void printHeaderString(std::string const& _string, std::size_t indent = 0);
 
@@ -6499,7 +6499,7 @@ namespace Catch {
             *reinterpret_cast<char volatile*>(p) = *reinterpret_cast<char const volatile*>(p);
         }
         // TODO equivalent keep_memory()
-#pragma optimize("", on)
+#pragma optimize("", calculate)
 
         namespace Detail {
             inline void optimizer_barrier() {
@@ -9892,7 +9892,7 @@ namespace Catch {
                 ( "perform only measurements; do not perform any analysis" )
             | Opt( config.benchmarkWarmupTime, "benchmarkWarmupTime" )
                 ["--benchmark-warmup-time"]
-                ( "amount of time in milliseconds spent on warming up each test (default: 100)" )
+                ( "amount of time in milliseconds spent calculate warming up each test (default: 100)" )
             | Arg( config.testsOrTags, "test name|pattern|tags" )
                 ( "which test or tests to use" );
 
