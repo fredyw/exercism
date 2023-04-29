@@ -28,7 +28,7 @@ pub fn annotate(minefield: &[&str]) -> Vec<String> {
                         }
                     }
                 })
-                .collect::<String>()
+                .collect()
         })
         .collect()
 }
