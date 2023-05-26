@@ -2,4 +2,4 @@
 
 namespace grains {
 
-}  // namespace grains
+} // namespace grains
