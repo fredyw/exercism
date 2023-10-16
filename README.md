@@ -1,2 +1,2 @@
 # exercism
-My solutions to exercism problems.
+My solutions to [Exercism](https://exercism.org/) problems.
