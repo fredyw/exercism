@@ -3,19 +3,8 @@ pub fn nth(n: u32) -> u32 {
         if n <= 1 {
             return false;
         }
-        (2..=(n as f32).sqrt().ceil() as u32)
-            .filter(|&num| num != n)
-            .all(|num| n % num != 0)
+        (2..=(n as f32).sqrt() as u32).all(|num| n % num != 0)
     }
 
-    let mut i = 0;
-    let mut num = 2;
-    while i <= n {
-        while !is_prime(num) {
-            num += 1;
-        }
-        num += 1;
-        i += 1;
-    }
-    num - 1
+    (2..).filter(|&x| is_prime(x)).nth(n as usize).unwrap()
 }
