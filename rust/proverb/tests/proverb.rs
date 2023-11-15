@@ -13,7 +13,6 @@ fn two_pieces() {
 
 // Notice the change in the last line at three pieces.
 #[test]
-#[ignore]
 fn three_pieces() {
     let input = vec!["nail", "shoe", "horse"];
     let expected = [
@@ -26,7 +25,6 @@ fn three_pieces() {
 }
 
 #[test]
-#[ignore]
 fn one_piece() {
     let input = vec!["nail"];
     let expected = String::from("And all for the want of a nail.");
@@ -34,7 +32,6 @@ fn one_piece() {
 }
 
 #[test]
-#[ignore]
 fn zero_pieces() {
     let input: Vec<&str> = vec![];
     let expected = String::new();
@@ -42,7 +39,6 @@ fn zero_pieces() {
 }
 
 #[test]
-#[ignore]
 fn full() {
     let input = vec![
         "nail", "shoe", "horse", "rider", "message", "battle", "kingdom",
@@ -61,7 +57,6 @@ fn full() {
 }
 
 #[test]
-#[ignore]
 fn three_pieces_modernized() {
     let input = vec!["pin", "gun", "soldier", "battle"];
     let expected = [
