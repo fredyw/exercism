@@ -1,4 +1,4 @@
-use crate::Error::{InvalidInputBase, InvalidOutputBase};
+use crate::Error::{InvalidDigit, InvalidInputBase, InvalidOutputBase};
 
 #[derive(Debug, PartialEq, Eq)]
 pub enum Error {
@@ -38,11 +38,24 @@ pub enum Error {
 ///    However, your function must be able to process input with leading 0 digits.
 ///
 pub fn convert(number: &[u32], from_base: u32, to_base: u32) -> Result<Vec<u32>, Error> {
-    if from_base == 0 {
+    if from_base < 2 {
         return Err(InvalidInputBase);
     }
-    if to_base == 0 {
+    if to_base < 2 {
         return Err(InvalidOutputBase);
     }
-    todo!("Convert {number:?} from base {from_base} to base {to_base}")
+    let mut n = 0;
+    for (i, &d) in number.iter().rev().enumerate() {
+        if d >= from_base {
+            return Err(InvalidDigit(d));
+        }
+        n += d * from_base.pow(i as u32);
+    }
+    let mut digits = Vec::new();
+    while n > 0 {
+        digits.push(n % to_base);
+        n /= to_base;
+    }
+    digits.reverse();
+    Ok(if digits.is_empty() { vec![0] } else { digits })
 }
