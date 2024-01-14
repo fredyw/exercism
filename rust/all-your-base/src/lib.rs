@@ -1,3 +1,5 @@
+use crate::Error::{InvalidInputBase, InvalidOutputBase};
+
 #[derive(Debug, PartialEq, Eq)]
 pub enum Error {
     InvalidInputBase,
@@ -36,5 +38,11 @@ pub enum Error {
 ///    However, your function must be able to process input with leading 0 digits.
 ///
 pub fn convert(number: &[u32], from_base: u32, to_base: u32) -> Result<Vec<u32>, Error> {
+    if from_base == 0 {
+        return Err(InvalidInputBase);
+    }
+    if to_base == 0 {
+        return Err(InvalidOutputBase);
+    }
     todo!("Convert {number:?} from base {from_base} to base {to_base}")
 }
