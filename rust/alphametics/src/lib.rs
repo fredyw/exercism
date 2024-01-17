@@ -5,18 +5,18 @@ pub fn solve(input: &str) -> Option<HashMap<char, u8>> {
         let mut string = String::new();
         for char in s.chars() {
             string.push_str(&map.get(&char).unwrap().to_string());
+            if string.starts_with("0") {
+                return None;
+            }
         }
-        if string.starts_with("0") {
-            None
-        } else {
-            Some(string.parse::<u64>().unwrap())
-        }
+        Some(string.parse::<u64>().unwrap())
     }
 
     fn solve(
         lhs: &Vec<&str>,
         rhs: &str,
         chars: &mut Vec<char>,
+        nums: &mut [bool; 10],
         map: &mut HashMap<char, u8>,
     ) -> bool {
         if chars.is_empty() {
@@ -29,18 +29,17 @@ pub fn solve(input: &str) -> Option<HashMap<char, u8>> {
         }
         let char = &chars.pop().unwrap();
         for num in 0..10 {
-            if map.contains_key(char) {
+            if map.contains_key(char) || nums[num as usize] {
                 continue;
             }
-            if map.values().any(|n| *n == num) {
-                continue;
-            }
+            nums[num as usize] = true;
             map.insert(*char, num);
-            let found = solve(lhs, rhs, chars, map);
+            let found = solve(lhs, rhs, chars, nums, map);
             if found {
                 return true;
             }
             map.remove(char);
+            nums[num as usize] = false;
         }
         chars.push(*char);
         false
@@ -56,7 +55,8 @@ pub fn solve(input: &str) -> Option<HashMap<char, u8>> {
         .into_iter()
         .collect();
     let mut map: HashMap<char, u8> = HashMap::new();
-    if solve(&lhs, rhs, &mut chars, &mut map) {
+    let mut nums = [false; 10];
+    if solve(&lhs, rhs, &mut chars, &mut nums, &mut map) {
         Some(map)
     } else {
         None
