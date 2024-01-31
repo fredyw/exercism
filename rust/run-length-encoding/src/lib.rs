@@ -1,3 +1,5 @@
+extern crate core;
+
 pub fn encode(source: &str) -> String {
     if source.is_empty() {
         return "".to_string();
@@ -26,8 +28,15 @@ pub fn encode(source: &str) -> String {
 }
 
 pub fn decode(source: &str) -> String {
-    if source.is_empty() {
-        return "".to_string();
+    let mut decoded = String::new();
+    let mut num = String::new();
+    for char in source.chars() {
+        if char.is_numeric() {
+            num.push(char);
+        } else {
+            decoded.push_str(&char.to_string().repeat(num.parse::<usize>().unwrap_or(1)));
+            num.clear();
+        }
     }
-    todo!("Return the run-length decoding of {source}.");
+    decoded
 }
