@@ -21,7 +21,6 @@ fn count_one_word() {
 }
 
 #[test]
-#[ignore]
 fn count_one_of_each_word() {
     let input = "one of each";
     let output = word_count::word_count(input);
@@ -30,7 +29,6 @@ fn count_one_of_each_word() {
 }
 
 #[test]
-#[ignore]
 fn multiple_occurrences_of_a_word() {
     let input = "one fish two fish red fish blue fish";
     let output = word_count::word_count(input);
@@ -39,7 +37,6 @@ fn multiple_occurrences_of_a_word() {
 }
 
 #[test]
-#[ignore]
 fn handles_cramped_lists() {
     let input = "one,two,three";
     let output = word_count::word_count(input);
@@ -48,7 +45,6 @@ fn handles_cramped_lists() {
 }
 
 #[test]
-#[ignore]
 fn handles_expanded_lists() {
     let input = "one,\ntwo,\nthree";
     let output = word_count::word_count(input);
@@ -57,7 +53,6 @@ fn handles_expanded_lists() {
 }
 
 #[test]
-#[ignore]
 fn ignore_punctuation() {
     let input = "car: carpet as java: javascript!!&@$%^&";
     let output = word_count::word_count(input);
@@ -72,7 +67,6 @@ fn ignore_punctuation() {
 }
 
 #[test]
-#[ignore]
 fn include_numbers() {
     let input = "testing, 1, 2 testing";
     let output = word_count::word_count(input);
@@ -81,7 +75,6 @@ fn include_numbers() {
 }
 
 #[test]
-#[ignore]
 fn normalize_case() {
     let input = "go Go GO Stop stop";
     let output = word_count::word_count(input);
@@ -90,7 +83,6 @@ fn normalize_case() {
 }
 
 #[test]
-#[ignore]
 fn with_apostrophes() {
     let input = "'First: don't laugh. Then: don't cry. You're getting it.'";
     let output = word_count::word_count(input);
@@ -108,7 +100,6 @@ fn with_apostrophes() {
 }
 
 #[test]
-#[ignore]
 fn with_quotations() {
     let input = "Joe can't tell between 'large' and large.";
     let output = word_count::word_count(input);
@@ -124,7 +115,6 @@ fn with_quotations() {
 }
 
 #[test]
-#[ignore]
 fn substrings_from_the_beginning() {
     let input = "Joe can't tell between app, apple and a.";
     let output = word_count::word_count(input);
@@ -142,7 +132,6 @@ fn substrings_from_the_beginning() {
 }
 
 #[test]
-#[ignore]
 fn multiple_spaces_not_detected_as_a_word() {
     let input = " multiple   whitespaces";
     let output = word_count::word_count(input);
@@ -151,7 +140,6 @@ fn multiple_spaces_not_detected_as_a_word() {
 }
 
 #[test]
-#[ignore]
 fn alternating_word_separators_not_detected_as_a_word() {
     let input = ",\n,one,\n ,two \n 'three'";
     let output = word_count::word_count(input);
@@ -160,7 +148,6 @@ fn alternating_word_separators_not_detected_as_a_word() {
 }
 
 #[test]
-#[ignore]
 fn quotation_for_word_with_apostrophe() {
     let input = "can, can't, 'can't'";
     let output = word_count::word_count(input);
