@@ -1,5 +1,16 @@
 pub fn number(user_number: &str) -> Option<String> {
-    todo!(
-        "Given the number entered by user '{user_number}', convert it into SMS-friendly format. If the entered number is not a valid NANP number, return None."
-    );
+    let phone_number = user_number.replace(|c: char| !c.is_numeric(), "");
+    if phone_number.starts_with("0") {
+        None
+    } else if phone_number.len() == 11 {
+        Some(
+            phone_number.chars().collect::<Vec<char>>()[1..]
+                .iter()
+                .collect::<String>(),
+        )
+    } else if phone_number.len() == 10 {
+        Some(phone_number)
+    } else {
+        None
+    }
 }
