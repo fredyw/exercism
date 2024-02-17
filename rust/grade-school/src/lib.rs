@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 // This annotation prevents Clippy from warning us that `School` has a
 // `fn new()` with no arguments, but doesn't implement the `Default` trait.
 //
@@ -5,19 +7,28 @@
 // case, we want to keep things relatively simple. The `Default` trait is not the point
 // of this exercise.
 #[allow(clippy::new_without_default)]
-pub struct School {}
+pub struct School {
+    grades: HashMap<u32, Vec<String>>,
+}
 
 impl School {
     pub fn new() -> School {
-        todo!()
+        School {
+            grades: HashMap::new(),
+        }
     }
 
     pub fn add(&mut self, grade: u32, student: &str) {
-        todo!("Add {student} to the roster for {grade}")
+        self.grades
+            .entry(grade)
+            .or_insert(vec![])
+            .push(student.to_owned())
     }
 
     pub fn grades(&self) -> Vec<u32> {
-        todo!()
+        let mut grades = self.grades.keys().copied().collect::<Vec<u32>>();
+        grades.sort();
+        grades
     }
 
     // If `grade` returned a reference, `School` would be forced to keep a `Vec<String>`
@@ -25,6 +36,8 @@ impl School {
     // the internal structure can be completely arbitrary. The tradeoff is that some data
     // must be copied each time `grade` is called.
     pub fn grade(&self, grade: u32) -> Vec<String> {
-        todo!("Return the list of students in {grade}")
+        let mut students = self.grades.get(&grade).unwrap_or(&vec![]).to_owned();
+        students.sort();
+        students.to_owned()
     }
 }

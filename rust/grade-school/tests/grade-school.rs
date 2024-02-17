@@ -42,7 +42,6 @@ fn grade_for_empty_school() {
 }
 
 #[test]
-#[ignore]
 fn grade_when_no_students_have_that_grade() {
     let mut s = school::School::new();
     s.add(7, "Logan");
