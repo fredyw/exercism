@@ -81,14 +81,33 @@ impl BowlingGame {
         if length < 10 && score > 10 {
             return Err(Error::NotEnoughPinsLeft);
         }
-        if frame.score_type.is_none() {
-            if frame.throws.len() == 1 && score == 10 {
-                frame.score_type = Some(ScoreType::Strike);
-            } else if frame.throws.len() == 2 && score == 10 {
-                frame.score_type = Some(ScoreType::Spare);
-            } else if frame.throws.len() == 2 {
-                frame.score_type = Some(ScoreType::OpenFrame);
+        match frame.score_type {
+            None => {
+                if frame.throws.len() == 1 && score == 10 {
+                    frame.score_type = Some(ScoreType::Strike);
+                } else if frame.throws.len() == 2 && score == 10 {
+                    frame.score_type = Some(ScoreType::Spare);
+                } else if frame.throws.len() == 2 {
+                    frame.score_type = Some(ScoreType::OpenFrame);
+                }
             }
+            Some(score_type) => match score_type {
+                ScoreType::OpenFrame => {
+                    if score > 10 {
+                        return Err(Error::NotEnoughPinsLeft);
+                    }
+                }
+                ScoreType::Spare => {
+                    if score > 20 {
+                        return Err(Error::NotEnoughPinsLeft);
+                    }
+                }
+                ScoreType::Strike => {
+                    if score > 30 {
+                        return Err(Error::NotEnoughPinsLeft);
+                    }
+                }
+            },
         }
         Ok(())
     }
