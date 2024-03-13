@@ -4,7 +4,7 @@ pub enum Error {
     GameComplete,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub enum ScoreType {
     OpenFrame,
     Spare,
@@ -37,7 +37,7 @@ impl BowlingGame {
     }
 
     pub fn roll(&mut self, pins: u16) -> Result<(), Error> {
-        if self.frames.len() < 9 {
+        if self.frames.len() < 10 {
             // Create a new frame as necessary.
             if self.frames.is_empty() {
                 self.frames.push(Frame::new());
@@ -61,7 +61,7 @@ impl BowlingGame {
                         return Err(Error::GameComplete);
                     }
                     ScoreType::Spare => {
-                        if frame.throws.len() + 1 > 2 {
+                        if frame.throws.len() + 1 > 3 {
                             return Err(Error::GameComplete);
                         }
                     }
@@ -73,11 +73,11 @@ impl BowlingGame {
                 }
             }
         }
+        frame.throws.push(pins);
         let score = frame.throws.iter().sum::<u16>();
-        if score + pins > 10 {
+        if length < 10 && score > 10 {
             return Err(Error::NotEnoughPinsLeft);
         }
-        frame.throws.push(pins);
         if frame.throws.len() == 1 && score == 10 {
             frame.score_type = Some(ScoreType::Strike);
         } else if frame.throws.len() == 2 && score == 10 {
@@ -89,6 +89,32 @@ impl BowlingGame {
     }
 
     pub fn score(&self) -> Option<u16> {
-        None
+        if self.frames.len() == 10 {
+            if let Some(frame) = self.frames.get(self.frames.len() - 1) {
+                match frame.score_type {
+                    None => return None,
+                    Some(score_type) => match score_type {
+                        ScoreType::OpenFrame => {
+                            if frame.throws.len() < 2 {
+                                return None;
+                            }
+                        }
+                        ScoreType::Spare => {
+                            if frame.throws.len() < 3 {
+                                return None;
+                            }
+                        }
+                        ScoreType::Strike => {
+                            if frame.throws.len() < 3 {
+                                return None;
+                            }
+                        }
+                    },
+                }
+            }
+            Some(0)
+        } else {
+            None
+        }
     }
 }
