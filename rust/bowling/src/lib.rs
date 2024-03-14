@@ -110,42 +110,41 @@ impl BowlingGame {
     }
 
     pub fn score(&self) -> Option<u16> {
+        if !self.has_score() {
+            return None;
+        }
+        let score = self
+            .frames
+            .iter()
+            .flat_map(|f| f.throws.iter())
+            .sum::<u16>();
+        let bonus = self
+            .frames
+            .iter()
+            .enumerate()
+            .map(|(i, frame)| match frame.score_type.unwrap() {
+                ScoreType::Spare => self.calculate_bonus(i + 1, 1),
+                ScoreType::Strike => self.calculate_bonus(i + 1, 2),
+                _ => 0,
+            })
+            .sum::<u16>();
+        Some(score + bonus)
+    }
+
+    fn has_score(&self) -> bool {
         if self.frames.len() == 10 {
-            if let Some(frame) = self.frames.get(self.frames.len() - 1) {
-                match frame.score_type {
-                    None => return None,
-                    Some(score_type) => match score_type {
-                        ScoreType::OpenFrame => {
-                            if frame.throws.len() < 2 {
-                                return None;
-                            }
-                        }
-                        ScoreType::Spare | ScoreType::Strike => {
-                            if frame.throws.len() < 3 {
-                                return None;
-                            }
-                        }
-                    },
-                }
-            }
-            let score = self
-                .frames
+            self.frames
+                .get(self.frames.len() - 1)
                 .iter()
-                .flat_map(|f| f.throws.iter())
-                .sum::<u16>();
-            let bonus = self
-                .frames
-                .iter()
-                .enumerate()
-                .map(|(i, frame)| match frame.score_type.unwrap() {
-                    ScoreType::Spare => self.calculate_bonus(i + 1, 1),
-                    ScoreType::Strike => self.calculate_bonus(i + 1, 2),
-                    _ => 0,
+                .flat_map(|frame| {
+                    frame.score_type.map(|score_type| match score_type {
+                        ScoreType::OpenFrame => frame.throws.len() == 2,
+                        ScoreType::Spare | ScoreType::Strike => frame.throws.len() == 3,
+                    })
                 })
-                .sum::<u16>();
-            Some(score + bonus)
+                .all(|b| b)
         } else {
-            None
+            false
         }
     }
 
