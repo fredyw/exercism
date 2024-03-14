@@ -40,6 +40,9 @@ impl BowlingGame {
         if pins > 10 {
             return Err(Error::NotEnoughPinsLeft);
         }
+        if self.is_game_done() {
+            return Err(Error::GameComplete);
+        }
         if self.frames.len() < 10 {
             // Create a new frame as necessary.
             if self.frames.is_empty() {
@@ -56,21 +59,6 @@ impl BowlingGame {
 
         let length = self.frames.len();
         let frame = self.frames.get_mut(length - 1).unwrap();
-        // Tenth frame is a special case.
-        if length == 10 {
-            if let Some(ref score_type) = frame.score_type {
-                match score_type {
-                    ScoreType::OpenFrame => {
-                        return Err(Error::GameComplete);
-                    }
-                    ScoreType::Spare | ScoreType::Strike => {
-                        if frame.throws.len() + 1 > 3 {
-                            return Err(Error::GameComplete);
-                        }
-                    }
-                }
-            }
-        }
         frame.throws.push(pins);
         let score = frame.throws.iter().sum::<u16>();
         if length < 10 && score > 10 {
@@ -110,7 +98,7 @@ impl BowlingGame {
     }
 
     pub fn score(&self) -> Option<u16> {
-        if !self.has_score() {
+        if !self.is_game_done() {
             return None;
         }
         let score = self
@@ -131,9 +119,15 @@ impl BowlingGame {
         Some(score + bonus)
     }
 
-    fn has_score(&self) -> bool {
-        if self.frames.len() == 10 {
-            self.frames
+    fn is_game_done(&self) -> bool {
+        self.frames.len() == 10
+            && self
+                .frames
+                .get(self.frames.len() - 1)
+                .iter()
+                .all(|f| f.score_type.is_some())
+            && self
+                .frames
                 .get(self.frames.len() - 1)
                 .iter()
                 .flat_map(|frame| {
@@ -143,9 +137,6 @@ impl BowlingGame {
                     })
                 })
                 .all(|b| b)
-        } else {
-            false
-        }
     }
 
     fn calculate_bonus(&self, i: usize, n: usize) -> u16 {
