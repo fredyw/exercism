@@ -63,12 +63,7 @@ impl BowlingGame {
                     ScoreType::OpenFrame => {
                         return Err(Error::GameComplete);
                     }
-                    ScoreType::Spare => {
-                        if frame.throws.len() + 1 > 3 {
-                            return Err(Error::GameComplete);
-                        }
-                    }
-                    ScoreType::Strike => {
+                    ScoreType::Spare | ScoreType::Strike => {
                         if frame.throws.len() + 1 > 3 {
                             return Err(Error::GameComplete);
                         }
@@ -123,12 +118,7 @@ impl BowlingGame {
                                 return None;
                             }
                         }
-                        ScoreType::Spare => {
-                            if frame.throws.len() < 3 {
-                                return None;
-                            }
-                        }
-                        ScoreType::Strike => {
+                        ScoreType::Spare | ScoreType::Strike => {
                             if frame.throws.len() < 3 {
                                 return None;
                             }
@@ -136,9 +126,32 @@ impl BowlingGame {
                     },
                 }
             }
-            Some(0)
+            let score = self
+                .frames
+                .iter()
+                .flat_map(|f| f.throws.iter())
+                .sum::<u16>();
+            let bonus = self
+                .frames
+                .iter()
+                .enumerate()
+                .map(|(i, frame)| match frame.score_type.unwrap() {
+                    ScoreType::Spare => self.calculate_bonus(i + 1, 1),
+                    ScoreType::Strike => self.calculate_bonus(i + 1, 2),
+                    _ => 0,
+                })
+                .sum::<u16>();
+            Some(score + bonus)
         } else {
             None
         }
+    }
+
+    fn calculate_bonus(&self, i: usize, n: usize) -> u16 {
+        *(&self.frames[i..]
+            .iter()
+            .flat_map(|f| f.throws.iter().copied())
+            .take(n)
+            .sum::<u16>())
     }
 }
