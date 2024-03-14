@@ -37,14 +37,7 @@ impl BowlingGame {
     }
 
     pub fn roll(&mut self, pins: u16) -> Result<(), Error> {
-        if pins > 10 {
-            return Err(Error::NotEnoughPinsLeft);
-        }
-        if self.is_game_done() {
-            return Err(Error::GameComplete);
-        }
         if self.frames.len() < 10 {
-            // Create a new frame as necessary.
             if self.frames.is_empty() {
                 self.frames.push(Frame::new());
             } else {
@@ -57,42 +50,25 @@ impl BowlingGame {
             }
         }
 
+        if self.is_game_done() {
+            return Err(Error::GameComplete);
+        }
+        if !self.has_enough_pins(pins) {
+            return Err(Error::NotEnoughPinsLeft);
+        }
+
         let length = self.frames.len();
         let frame = self.frames.get_mut(length - 1).unwrap();
         frame.throws.push(pins);
         let score = frame.throws.iter().sum::<u16>();
-        if length < 10 && score > 10 {
-            return Err(Error::NotEnoughPinsLeft);
-        }
-        match frame.score_type {
-            None => {
-                if frame.throws.len() == 1 && score == 10 {
-                    frame.score_type = Some(ScoreType::Strike);
-                } else if frame.throws.len() == 2 && score == 10 {
-                    frame.score_type = Some(ScoreType::Spare);
-                } else if frame.throws.len() == 2 {
-                    frame.score_type = Some(ScoreType::OpenFrame);
-                }
+        if frame.score_type.is_none() {
+            if frame.throws.len() == 1 && score == 10 {
+                frame.score_type = Some(ScoreType::Strike);
+            } else if frame.throws.len() == 2 && score == 10 {
+                frame.score_type = Some(ScoreType::Spare);
+            } else if frame.throws.len() == 2 {
+                frame.score_type = Some(ScoreType::OpenFrame);
             }
-            Some(score_type) => match score_type {
-                ScoreType::OpenFrame => {
-                    if score > 10 {
-                        return Err(Error::NotEnoughPinsLeft);
-                    }
-                }
-                ScoreType::Spare => {
-                    if score > 20 {
-                        return Err(Error::NotEnoughPinsLeft);
-                    }
-                }
-                ScoreType::Strike => {
-                    if *frame.throws.get(1).unwrap() < 10
-                        && frame.throws[1..].iter().sum::<u16>() > 10
-                    {
-                        return Err(Error::NotEnoughPinsLeft);
-                    }
-                }
-            },
         }
         Ok(())
     }
@@ -119,6 +95,30 @@ impl BowlingGame {
         Some(score + bonus)
     }
 
+    fn has_enough_pins(&self, pins: u16) -> bool {
+        if pins > 10 {
+            return false;
+        }
+        let frame = self.frames.get(self.frames.len() - 1).unwrap();
+        let score = frame.throws.iter().sum::<u16>() + pins;
+        if self.frames.len() < 10 {
+            score <= 10
+        } else {
+            match frame.score_type {
+                None => true,
+                Some(score_type) => match score_type {
+                    ScoreType::OpenFrame => score <= 10,
+                    ScoreType::Spare => score <= 20,
+                    ScoreType::Strike => {
+                        *frame.throws.get(1).unwrap_or(&pins) == 10
+                            || (*frame.throws.get(1).unwrap_or(&pins) < 10
+                                && frame.throws[1..].iter().sum::<u16>() + pins <= 10)
+                    }
+                },
+            }
+        }
+    }
+
     fn is_game_done(&self) -> bool {
         self.frames.len() == 10
             && self
@@ -142,7 +142,7 @@ impl BowlingGame {
     fn calculate_bonus(&self, i: usize, n: usize) -> u16 {
         *(&self.frames[i..]
             .iter()
-            .flat_map(|f| f.throws.iter().copied())
+            .flat_map(|frame| frame.throws.iter().copied())
             .take(n)
             .sum::<u16>())
     }
