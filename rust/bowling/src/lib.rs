@@ -98,7 +98,9 @@ impl BowlingGame {
                     }
                 }
                 ScoreType::Strike => {
-                    if score > 30 {
+                    if *frame.throws.get(1).unwrap() < 10
+                        && frame.throws[1..].iter().sum::<u16>() > 10
+                    {
                         return Err(Error::NotEnoughPinsLeft);
                     }
                 }
