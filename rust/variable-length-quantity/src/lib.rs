@@ -30,5 +30,21 @@ pub fn to_bytes(values: &[u32]) -> Vec<u8> {
 /// Given a stream of bytes, extract all numbers which are encoded in there.
 pub fn from_bytes(bytes: &[u8]) -> Result<Vec<u32>, Error> {
     let mut decoded = vec![];
+    let mut i = 0;
+    while i < bytes.len() {
+        let mut value = 0;
+        while i < bytes.len() && bytes[i] & 0b_1000_0000 != 0 {
+            let byte = bytes[i] & 0b_0111_1111;
+            value |= byte as u32;
+            value <<= 7;
+            i += 1;
+        }
+        if i >= bytes.len() {
+            return Err(Error::IncompleteNumber);
+        }
+        value |= bytes[i] as u32;
+        decoded.push(value);
+        i += 1;
+    }
     Ok(decoded)
 }
