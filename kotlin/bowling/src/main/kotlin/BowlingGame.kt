@@ -3,7 +3,7 @@ class BowlingGame {
         TODO("Implement the function to complete the task")
     }
 
-    fun score() {
+    fun score(): Int {
         TODO("Implement the function to complete the task")
     }
 }
