@@ -14,11 +14,15 @@ class BowlingGame {
 
     fun roll(pins: Int) {
         if (frames.size < 10) {
-            frames.add(Frame())
-        } else {
-            val frame = frames.last();
-            if ((frame.throws.size == 1 && frame.throws.sum() == 10) || frame.throws.size == 2) {
-                frames.add(Frame())
+            if (frames.isEmpty()) {
+                frames += Frame()
+            } else {
+                val lastFrame = frames.last();
+                if ((lastFrame.throws.size == 1 && lastFrame.throws.sum() == 10) ||
+                    lastFrame.throws.size == 2
+                ) {
+                    frames += Frame()
+                }
             }
         }
 
@@ -29,16 +33,16 @@ class BowlingGame {
             throw IllegalStateException("Not enough pins")
         }
 
-        val frame = frames.last();
-        frame.throws.add(pins);
-        val score = frame.throws.sum();
-        if (frame.scoreType != null) {
+        val frame = frames.last()
+        frame.throws += pins
+        val score = frame.throws.sum()
+        if (frame.scoreType == null) {
             if (frame.throws.size == 1 && score == 10) {
-                frame.scoreType = ScoreType.STRIKE;
+                frame.scoreType = ScoreType.STRIKE
             } else if (frame.throws.size == 2 && score == 10) {
-                frame.scoreType = ScoreType.SPARE;
+                frame.scoreType = ScoreType.SPARE
             } else if (frame.throws.size == 2) {
-                frame.scoreType = ScoreType.OPEN_FRAME;
+                frame.scoreType = ScoreType.OPEN_FRAME
             }
         }
     }
@@ -59,10 +63,10 @@ class BowlingGame {
     }
 
     private fun hasEnoughPins(pins: Int): Boolean {
-        if (pins > 10) {
+        if (pins < 0 || pins > 10) {
             return false
         }
-        val lastFrame = frames.last();
+        val lastFrame = frames.last()
         val score = lastFrame.throws.sum() + pins
         return if (frames.size < 10) {
             score <= 10
@@ -84,13 +88,10 @@ class BowlingGame {
         val lastFrame = frames.lastOrNull()
         return if (frames.size == 10 && lastFrame != null) {
             val scoreType = lastFrame.scoreType
-            return if (scoreType != null) {
-                when (scoreType) {
-                    ScoreType.OPEN_FRAME -> lastFrame.throws.size == 2
-                    ScoreType.SPARE, ScoreType.STRIKE -> lastFrame.throws.size == 3
-                }
-            } else {
-                false
+            when (scoreType) {
+                ScoreType.OPEN_FRAME -> lastFrame.throws.size == 2
+                ScoreType.SPARE, ScoreType.STRIKE -> lastFrame.throws.size == 3
+                null -> false
             }
         } else {
             false
