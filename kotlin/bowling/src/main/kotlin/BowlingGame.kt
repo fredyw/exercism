@@ -65,17 +65,19 @@ class BowlingGame {
 
     private fun isGameDone(): Boolean {
         val lastFrame = frames.lastOrNull()
-        if (frames.size == 10 && lastFrame != null) {
+        return if (frames.size == 10 && lastFrame != null) {
             val scoreType = lastFrame.scoreType
-            if (scoreType != null) {
+            return if (scoreType != null) {
                 when (scoreType) {
                     ScoreType.OPEN_FRAME -> lastFrame.throws.size == 2
                     ScoreType.SPARE, ScoreType.STRIKE -> lastFrame.throws.size == 3
                 }
+            } else {
+                false
             }
+        } else {
+            false
         }
-        return frames.size == 10 && frames.last().scoreType != null
-
     }
 
     private fun calculateBonus(i: Int, n: Int): Int {
