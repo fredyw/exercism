@@ -1,11 +1,10 @@
-enum class ScoreType {
-    OPEN_FRAME,
-    SPARE,
-    STRIKE
-}
-
-
 class BowlingGame {
+    enum class ScoreType {
+        OPEN_FRAME,
+        SPARE,
+        STRIKE
+    }
+
     data class Frame(
         val throws: MutableList<Int> = mutableListOf(),
         var scoreType: ScoreType? = null
@@ -60,7 +59,25 @@ class BowlingGame {
     }
 
     private fun hasEnoughPins(pins: Int): Boolean {
-        TODO()
+        if (pins > 10) {
+            return false
+        }
+        val lastFrame = frames.last();
+        val score = lastFrame.throws.sum() + pins
+        return if (frames.size < 10) {
+            score <= 10
+        } else {
+            when (lastFrame.scoreType) {
+                ScoreType.OPEN_FRAME -> score <= 10
+                ScoreType.SPARE -> score <= 20
+                ScoreType.STRIKE -> (lastFrame.throws.getOrNull(1) ?: pins) == 10 ||
+                        ((lastFrame.throws.getOrNull(1) ?: pins) < 10 &&
+                                lastFrame.throws.subList(1, lastFrame.throws.size)
+                                    .sum() + pins <= 10)
+
+                null -> true
+            }
+        }
     }
 
     private fun isGameDone(): Boolean {
