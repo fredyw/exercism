@@ -10,21 +10,13 @@ impl<'a> CodonsInfo<'a> {
     }
 
     pub fn of_rna(&self, rna: &str) -> Option<Vec<&'a str>> {
-        let mut proteins = vec![];
         let chars: Vec<char> = rna.chars().collect::<Vec<char>>();
-        for chunk in chars.chunks(3) {
-            let codon = chunk.iter().collect::<String>();
-            match self.map.get(&*codon) {
-                None => return None,
-                Some(&protein) => {
-                    if protein == "stop codon" {
-                        break;
-                    }
-                    proteins.push(protein);
-                }
-            }
-        }
-        Some(proteins)
+        chars
+            .chunks(3)
+            .map(|chunk| chunk.iter().collect::<String>())
+            .map(|codon| self.name_for(&codon))
+            .take_while(|codon| *codon != Some("stop codon"))
+            .collect()
     }
 }
 
