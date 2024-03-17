@@ -5,12 +5,6 @@ pub struct CodonsInfo<'a> {
 }
 
 impl<'a> CodonsInfo<'a> {
-    pub fn new() -> Self {
-        Self {
-            map: HashMap::new(),
-        }
-    }
-
     pub fn name_for(&self, codon: &str) -> Option<&'a str> {
         self.map.get(codon).copied()
     }
@@ -35,9 +29,7 @@ impl<'a> CodonsInfo<'a> {
 }
 
 pub fn parse<'a>(pairs: Vec<(&'a str, &'a str)>) -> CodonsInfo<'a> {
-    let mut codons_info = CodonsInfo::new();
-    pairs.iter().for_each(|(codon, protein)| {
-        codons_info.map.insert(codon, protein);
-    });
-    codons_info
+    CodonsInfo {
+        map: pairs.into_iter().collect(),
+    }
 }
