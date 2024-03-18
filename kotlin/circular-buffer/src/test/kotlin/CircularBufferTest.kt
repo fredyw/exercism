@@ -1,5 +1,4 @@
 import org.junit.Test
-import org.junit.Ignore
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
@@ -12,7 +11,6 @@ class CircularBufferTest {
         }
     }
 
-    @Ignore
     @Test
     fun `can read an item just written`() {
         val buffer = CircularBuffer<Int>(1)
@@ -20,7 +18,6 @@ class CircularBufferTest {
         assertEquals(1, buffer.read())
     }
 
-    @Ignore
     @Test
     fun `each item may only be read once`() {
         val buffer = CircularBuffer<Int>(1)
@@ -32,7 +29,6 @@ class CircularBufferTest {
         }
     }
 
-    @Ignore
     @Test
     fun `items are read in the order they are written`() {
         val buffer = CircularBuffer<Int>(2)
@@ -43,7 +39,6 @@ class CircularBufferTest {
         assertEquals(2, buffer.read())
     }
 
-    @Ignore
     @Test
     fun `full buffer can't be written to`() {
         val buffer = CircularBuffer<Int>(1)
@@ -53,7 +48,6 @@ class CircularBufferTest {
         }
     }
 
-    @Ignore
     @Test
     fun `a read frees up capacity for another write`() {
         val buffer = CircularBuffer<Int>(1)
@@ -64,7 +58,6 @@ class CircularBufferTest {
         assertEquals(2, buffer.read())
     }
 
-    @Ignore
     @Test
     fun `read position is maintained even across multiple writes`() {
         val buffer = CircularBuffer<Int>(3)
@@ -77,7 +70,6 @@ class CircularBufferTest {
         assertEquals(3, buffer.read())
     }
 
-    @Ignore
     @Test
     fun `items cleared out of buffer can't be read`() {
         val buffer = CircularBuffer<Int>(1)
@@ -89,7 +81,6 @@ class CircularBufferTest {
         }
     }
 
-    @Ignore
     @Test
     fun `clear frees up capacity for another write`() {
         val buffer = CircularBuffer<Int>(1)
@@ -100,7 +91,6 @@ class CircularBufferTest {
         assertEquals(2, buffer.read())
     }
 
-    @Ignore
     @Test
     fun `clear does nothing on empty buffer`() {
         val buffer = CircularBuffer<Int>(1)
@@ -110,7 +100,6 @@ class CircularBufferTest {
         assertEquals(1, buffer.read())
     }
 
-    @Ignore
     @Test
     fun `overwrite acts like write on non-full buffer`() {
         val buffer = CircularBuffer<Int>(2)
@@ -121,7 +110,6 @@ class CircularBufferTest {
         assertEquals(2, buffer.read())
     }
 
-    @Ignore
     @Test
     fun `overwrite replaces the oldest item on full buffer`() {
         val buffer = CircularBuffer<Int>(2)
@@ -133,7 +121,6 @@ class CircularBufferTest {
         assertEquals(3, buffer.read())
     }
 
-    @Ignore
     @Test
     fun `overwrite replaces the oldest item remaining in buffer following a read`() {
         val buffer = CircularBuffer<Int>(3)
@@ -150,7 +137,6 @@ class CircularBufferTest {
         assertEquals(5, buffer.read())
     }
 
-    @Ignore
     @Test
     fun `initial clear does not affect wrapping around`() {
         val buffer = CircularBuffer<Int>(2)
