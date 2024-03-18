@@ -1,27 +1,36 @@
 import kotlin.collections.ArrayDeque
 
-// TODO: implement proper exceptions to complete the task
-class EmptyBufferException
+class EmptyBufferException : Exception()
 
-class BufferFullException
+class BufferFullException : Exception()
 
-class CircularBuffer<T> {
-    // TODO: implement proper constructor to complete the task
+class CircularBuffer<T>(private val capacity: Int) {
+    private val buffer: MutableList<T> = ArrayDeque(capacity)
 
     fun read() : T {
-        TODO("Implement this function to complete the task")
+        if (buffer.isEmpty()) {
+            throw EmptyBufferException()
+        }
+        return buffer.removeFirst()
     }
 
     fun write(value: T) {
-        TODO("Implement this function to complete the task")
-
+        if (isFull()) {
+            throw BufferFullException()
+        }
+        buffer.add(value)
     }
 
     fun overwrite(value: T) {
-        TODO("Implement this function to complete the task")
+        if (isFull()) {
+            buffer.removeFirst()
+        }
+        buffer.add(value)
     }
 
     fun clear() {
-        TODO("Implement this function to complete the task")
+        buffer.clear()
     }
+
+    private fun isFull(): Boolean = capacity == buffer.size
 }
