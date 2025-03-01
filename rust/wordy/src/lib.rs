@@ -12,10 +12,7 @@ pub fn answer(command: &str) -> Option<i32> {
     while i < words.len() {
         match words[i] {
             "plus" => {
-                if i + 1 >= words.len() {
-                    return None;
-                }
-                if let Ok(n) = words[i + 1].parse::<i32>() {
+                if let Some(n) = words.get(i + 1).and_then(|w| w.parse::<i32>().ok()) {
                     answer += n;
                 } else {
                     return None;
@@ -23,10 +20,7 @@ pub fn answer(command: &str) -> Option<i32> {
                 i += 2;
             }
             "minus" => {
-                if i + 1 >= words.len() {
-                    return None;
-                }
-                if let Ok(n) = words[i + 1].parse::<i32>() {
+                if let Some(n) = words.get(i + 1).and_then(|w| w.parse::<i32>().ok()) {
                     answer -= n;
                 } else {
                     return None;
@@ -64,7 +58,6 @@ pub fn answer(command: &str) -> Option<i32> {
                     return None;
                 }
                 if let Ok(n) = &words[i + 3][0..words[i + 3].len() - 2].parse::<i32>() {
-                    println!("n ==> {n}");
                     answer = answer.pow(*n as u32);
                 }
                 i += 5;
