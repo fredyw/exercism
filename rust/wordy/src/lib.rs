@@ -1,18 +1,21 @@
 pub fn answer(command: &str) -> Option<i32> {
-    let words: Vec<&str> = command.split(" ").collect();
-    if words[0] != "What" || words[1] != "is" {
+    let words: Vec<&str> = command[0..command.len() - 1].split(" ").collect();
+    if words.len() < 3 || words[0] != "What" || words[1] != "is" {
         return None;
     }
-    let answer = ignore_question_mark(words[2]).parse::<i32>();
-    if answer.is_err() {
+    let mut answer = if let Ok(n) = words[2].parse::<i32>() {
+        n
+    } else {
         return None;
-    }
-    let mut answer = answer.unwrap();
+    };
     let mut i = 3;
     while i < words.len() {
         match words[i] {
             "plus" => {
-                if let Ok(n) = ignore_question_mark(words[i + 1]).parse::<i32>() {
+                if i + 1 >= words.len() {
+                    return None;
+                }
+                if let Ok(n) = words[i + 1].parse::<i32>() {
                     answer += n;
                 } else {
                     return None;
@@ -20,7 +23,10 @@ pub fn answer(command: &str) -> Option<i32> {
                 i += 2;
             }
             "minus" => {
-                if let Ok(n) = ignore_question_mark(words[i + 1]).parse::<i32>() {
+                if i + 1 >= words.len() {
+                    return None;
+                }
+                if let Ok(n) = words[i + 1].parse::<i32>() {
                     answer -= n;
                 } else {
                     return None;
@@ -28,7 +34,10 @@ pub fn answer(command: &str) -> Option<i32> {
                 i += 2;
             }
             "multiplied" => {
-                if let Ok(n) = ignore_question_mark(words[i + 2]).parse::<i32>() {
+                if words[i + 1] != "by" || i + 2 >= words.len() {
+                    return None;
+                }
+                if let Ok(n) = words[i + 2].parse::<i32>() {
                     answer *= n;
                 } else {
                     return None;
@@ -36,7 +45,10 @@ pub fn answer(command: &str) -> Option<i32> {
                 i += 3;
             }
             "divided" => {
-                if let Ok(n) = ignore_question_mark(words[i + 2]).parse::<i32>() {
+                if words[i + 1] != "by" || i + 2 >= words.len() {
+                    return None;
+                }
+                if let Ok(n) = words[i + 2].parse::<i32>() {
                     answer /= n;
                 } else {
                     return None;
@@ -47,12 +59,4 @@ pub fn answer(command: &str) -> Option<i32> {
         }
     }
     Some(answer)
-}
-
-fn ignore_question_mark(s: &str) -> &str {
-    if s.ends_with("?") {
-        &s[0..s.len() - 1]
-    } else {
-        s
-    }
 }
