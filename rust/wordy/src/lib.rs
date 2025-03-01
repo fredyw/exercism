@@ -34,7 +34,7 @@ pub fn answer(command: &str) -> Option<i32> {
                 i += 2;
             }
             "multiplied" => {
-                if words[i + 1] != "by" || i + 2 >= words.len() {
+                if i + 2 >= words.len() || words[i + 1] != "by" {
                     return None;
                 }
                 if let Ok(n) = words[i + 2].parse::<i32>() {
@@ -45,7 +45,7 @@ pub fn answer(command: &str) -> Option<i32> {
                 i += 3;
             }
             "divided" => {
-                if words[i + 1] != "by" || i + 2 >= words.len() {
+                if i + 2 >= words.len() || words[i + 1] != "by" {
                     return None;
                 }
                 if let Ok(n) = words[i + 2].parse::<i32>() {
@@ -54,6 +54,20 @@ pub fn answer(command: &str) -> Option<i32> {
                     return None;
                 }
                 i += 3;
+            }
+            "raised" => {
+                if i + 4 >= words.len()
+                    || words[i + 1] != "to"
+                    || words[i + 2] != "the"
+                    || words[i + 4] != "power"
+                {
+                    return None;
+                }
+                if let Ok(n) = &words[i + 3][0..words[i + 3].len() - 2].parse::<i32>() {
+                    println!("n ==> {n}");
+                    answer = answer.pow(*n as u32);
+                }
+                i += 5;
             }
             _ => return None,
         }
