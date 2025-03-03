@@ -10,7 +10,6 @@ fn single_letter() {
 }
 
 #[test]
-#[ignore]
 fn single_score_with_multiple_letters() {
     let input = BTreeMap::from([(1, vec!['A', 'E', 'I', 'O', 'U'])]);
 
@@ -20,7 +19,6 @@ fn single_score_with_multiple_letters() {
 }
 
 #[test]
-#[ignore]
 fn multiple_scores_with_multiple_letters() {
     let input = BTreeMap::from([(1, vec!['A', 'E']), (2, vec!['D', 'G'])]);
 
@@ -30,7 +28,6 @@ fn multiple_scores_with_multiple_letters() {
 }
 
 #[test]
-#[ignore]
 fn multiple_scores_with_differing_numbers_of_letters() {
     let input = BTreeMap::from([
         (1, vec!['A', 'E', 'I', 'O', 'U', 'L', 'N', 'R', 'S', 'T']),
