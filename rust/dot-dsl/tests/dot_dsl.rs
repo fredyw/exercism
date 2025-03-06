@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 
+use dot_dsl::graph::Graph;
 use dot_dsl::graph::graph_items::edge::Edge;
 use dot_dsl::graph::graph_items::node::Node;
-use dot_dsl::graph::Graph;
 
 #[test]
 fn empty_graph() {
@@ -16,7 +16,6 @@ fn empty_graph() {
 }
 
 #[test]
-#[ignore]
 fn graph_with_one_node() {
     let nodes = vec![Node::new("a")];
 
@@ -30,7 +29,6 @@ fn graph_with_one_node() {
 }
 
 #[test]
-#[ignore]
 fn graph_with_one_node_with_keywords() {
     let nodes = vec![Node::new("a").with_attrs(&[("color", "green")])];
 
@@ -47,7 +45,6 @@ fn graph_with_one_node_with_keywords() {
 }
 
 #[test]
-#[ignore]
 fn graph_with_one_edge() {
     let edges = vec![Edge::new("a", "b")];
 
@@ -61,7 +58,6 @@ fn graph_with_one_edge() {
 }
 
 #[test]
-#[ignore]
 fn graph_with_one_edge_with_keywords() {
     let edges = vec![Edge::new("a", "b").with_attrs(&[("color", "blue")])];
 
@@ -78,7 +74,6 @@ fn graph_with_one_edge_with_keywords() {
 }
 
 #[test]
-#[ignore]
 fn graph_with_one_attribute() {
     let graph = Graph::new().with_attrs(&[("foo", "1")]);
 
@@ -93,7 +88,6 @@ fn graph_with_one_attribute() {
 }
 
 #[test]
-#[ignore]
 fn graph_with_attributes() {
     let nodes = vec![
         Node::new("a").with_attrs(&[("color", "green")]),
@@ -141,7 +135,6 @@ fn graph_with_attributes() {
 }
 
 #[test]
-#[ignore]
 fn edges_store_attributes() {
     let nodes = vec![
         Node::new("a").with_attrs(&[("color", "green")]),
@@ -178,7 +171,6 @@ fn edges_store_attributes() {
 }
 
 #[test]
-#[ignore]
 fn graph_nodes_store_attributes() {
     let attributes = [("foo", "bar"), ("bat", "baz"), ("bim", "bef")];
     let graph = Graph::new().with_nodes(
