@@ -21,8 +21,8 @@ impl Dna {
     }
 
     pub fn into_rna(self) -> Rna {
-        Rna::new(
-            &self
+        Rna {
+            rna: self
                 .dna
                 .chars()
                 .map(|c| match c {
@@ -32,8 +32,7 @@ impl Dna {
                     _ => 'U',
                 })
                 .collect::<String>(),
-        )
-        .expect("Invalid RNA")
+        }
     }
 }
 
