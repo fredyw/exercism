@@ -11,20 +11,20 @@ use std::io::BufRead;
 /// [`std::env::args`]: https://doc.rust-lang.org/std/env/fn.args.html
 #[derive(Debug)]
 pub struct Flags {
-    prepend_line_number: bool,
-    output_file_name: bool,
-    case_insensitive_search: bool,
-    invert_search: bool,
+    show_line_number: bool,
+    file_name_only: bool,
+    case_insensitive: bool,
+    invert: bool,
     match_entire_line: bool,
 }
 
 impl Flags {
     pub fn new(flags: &[&str]) -> Self {
         Self {
-            prepend_line_number: flags.contains(&"-n"),
-            output_file_name: flags.contains(&"-l"),
-            case_insensitive_search: flags.contains(&"-i"),
-            invert_search: flags.contains(&"-v"),
+            show_line_number: flags.contains(&"-n"),
+            file_name_only: flags.contains(&"-l"),
+            case_insensitive: flags.contains(&"-i"),
+            invert: flags.contains(&"-v"),
             match_entire_line: flags.contains(&"-x"),
         }
     }
@@ -35,41 +35,36 @@ pub fn grep(pattern: &str, flags: &Flags, files: &[&str]) -> Result<Vec<String>,
     let has_multiple_files = files.len() > 1;
     for file in files {
         for (i, line) in io::BufReader::new(File::open(file)?).lines().enumerate() {
-            let pattern = if flags.case_insensitive_search {
+            let pattern = if flags.case_insensitive {
                 pattern.to_lowercase()
             } else {
                 pattern.to_owned()
             };
-            let line = line?;
-            let maybe_lowercase_line = if flags.case_insensitive_search {
-                line.to_lowercase()
+            let original_line = line?;
+            let line = if flags.case_insensitive {
+                original_line.to_lowercase()
             } else {
-                line.clone()
+                original_line.clone()
             };
-            let may_invert_search = |m: bool| -> bool { if flags.invert_search { !m } else { m } };
-            if flags.output_file_name {
-                if may_invert_search(maybe_lowercase_line.contains(&pattern)) {
+            let has_match = if flags.match_entire_line {
+                line == pattern
+            } else {
+                line.contains(&pattern)
+            };
+            let maybe_invert_search = |m: bool| -> bool { if flags.invert { !m } else { m } };
+            if flags.file_name_only {
+                if maybe_invert_search(has_match) {
                     result.push(file.to_string());
                     break;
                 }
-            } else if flags.match_entire_line {
-                if may_invert_search(maybe_lowercase_line == pattern) {
-                    result.push(build_output(
-                        flags.prepend_line_number,
-                        has_multiple_files,
-                        file,
-                        i,
-                        line,
-                    ));
-                }
             } else {
-                if may_invert_search(maybe_lowercase_line.contains(&pattern)) {
+                if maybe_invert_search(has_match) {
                     result.push(build_output(
-                        flags.prepend_line_number,
+                        flags.show_line_number,
                         has_multiple_files,
                         file,
                         i,
-                        line,
+                        original_line,
                     ));
                 }
             }
@@ -79,7 +74,7 @@ pub fn grep(pattern: &str, flags: &Flags, files: &[&str]) -> Result<Vec<String>,
 }
 
 fn build_output(
-    prepend_line_number: bool,
+    show_line_number: bool,
     has_multiple_files: bool,
     file: &str,
     index: usize,
@@ -92,7 +87,7 @@ fn build_output(
         } else {
             "".to_string()
         },
-        if prepend_line_number {
+        if show_line_number {
             format!("{}:", index + 1)
         } else {
             "".to_string()
