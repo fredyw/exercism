@@ -9,30 +9,35 @@ use std::io::BufRead;
 /// a dedicated struct. Therefore, we suggest that you do so in this exercise.
 ///
 /// [`std::env::args`]: https://doc.rust-lang.org/std/env/fn.args.html
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Flags {
     show_line_number: bool,
     file_name_only: bool,
     case_insensitive: bool,
-    invert: bool,
+    invert_search: bool,
     match_entire_line: bool,
 }
 
 impl Flags {
     pub fn new(flags: &[&str]) -> Self {
-        Self {
-            show_line_number: flags.contains(&"-n"),
-            file_name_only: flags.contains(&"-l"),
-            case_insensitive: flags.contains(&"-i"),
-            invert: flags.contains(&"-v"),
-            match_entire_line: flags.contains(&"-x"),
+        let mut f = Self::default();
+        for flag in flags {
+            match *flag {
+                "-n" => f.show_line_number = true,
+                "-l" => f.file_name_only = true,
+                "-i" => f.case_insensitive = true,
+                "-v" => f.invert_search = true,
+                "-x" => f.match_entire_line = true,
+                _ => (),
+            }
         }
+        f
     }
 }
 
 pub fn grep(pattern: &str, flags: &Flags, files: &[&str]) -> Result<Vec<String>, Error> {
     let mut result: Vec<String> = vec![];
-    let has_multiple_files = files.len() > 1;
+    let show_filename = files.len() > 1;
     for file in files {
         for (i, line) in io::BufReader::new(File::open(file)?).lines().enumerate() {
             let pattern = if flags.case_insensitive {
@@ -51,19 +56,23 @@ pub fn grep(pattern: &str, flags: &Flags, files: &[&str]) -> Result<Vec<String>,
             } else {
                 line.contains(&pattern)
             };
-            let maybe_invert_search = |m: bool| -> bool { if flags.invert { !m } else { m } };
+            let has_match = if flags.invert_search {
+                !has_match
+            } else {
+                has_match
+            };
             if flags.file_name_only {
-                if maybe_invert_search(has_match) {
+                if has_match {
                     result.push(file.to_string());
                     break;
                 }
             } else {
-                if maybe_invert_search(has_match) {
+                if has_match {
                     result.push(build_output(
                         flags.show_line_number,
-                        has_multiple_files,
+                        show_filename,
                         file,
-                        i,
+                        i + 1,
                         original_line,
                     ));
                 }
@@ -75,23 +84,15 @@ pub fn grep(pattern: &str, flags: &Flags, files: &[&str]) -> Result<Vec<String>,
 
 fn build_output(
     show_line_number: bool,
-    has_multiple_files: bool,
+    show_file_name: bool,
     file: &str,
-    index: usize,
+    line_number: usize,
     line: String,
 ) -> String {
-    format!(
-        "{}{}{}",
-        if has_multiple_files {
-            format!("{}:", file)
-        } else {
-            "".to_string()
-        },
-        if show_line_number {
-            format!("{}:", index + 1)
-        } else {
-            "".to_string()
-        },
-        line
-    )
+    match (show_file_name, show_line_number) {
+        (false, false) => line,
+        (true, false) => format!("{}:{}", file, line),
+        (false, true) => format!("{}:{}", line_number, line),
+        (true, true) => format!("{}:{}:{}", file, line_number, line),
+    }
 }
