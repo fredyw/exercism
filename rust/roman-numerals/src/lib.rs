@@ -63,6 +63,6 @@ impl From<u32> for Roman {
         map.insert(100, "C");
         map.insert(500, "D");
         map.insert(1000, "M");
-        Self { num, map: map }
+        Self { num, map }
     }
 }
