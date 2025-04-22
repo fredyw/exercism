@@ -97,7 +97,6 @@ fn word_beginning_with_ch() {
 }
 
 #[test]
-#[ignore]
 fn word_beginning_with_qu() {
     let input = "queen";
     let output = translate(input);
@@ -122,7 +121,6 @@ fn word_beginning_with_th() {
 }
 
 #[test]
-#[ignore]
 fn word_beginning_with_thr() {
     let input = "thrush";
     let output = translate(input);
@@ -147,7 +145,6 @@ fn word_beginning_with_yt() {
 }
 
 #[test]
-#[ignore]
 fn word_beginning_with_xr() {
     let input = "xray";
     let output = translate(input);
