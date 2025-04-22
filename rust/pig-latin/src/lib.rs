@@ -1,16 +1,31 @@
 use regex::Regex;
 
 pub fn translate(input: &str) -> String {
-    let vowel = Regex::new(r"((?:[aeiou]|yr|xr|yt).*)").unwrap();
-    let consonant = Regex::new(r"(thr?|sch|ch|s?qu|rh|[bcdfghjklmnpqrstvwxyz])(.*)").unwrap();
-    let words: Vec<&str> = input.split(" ").collect();
-    for word in words.into_iter() {
-        for (_, [first]) in vowel.captures_iter(word).map(|c| c.extract()) {
-            return format!("{}ay", first);
-        }
-        for (_, [first, second]) in consonant.captures_iter(word).map(|c| c.extract()) {
-            return format!("{}{}ay", second, first);
-        }
-    }
-    input.to_string()
+    let vowel = Regex::new(r"(^(?:[aeiou]|yr|xr|yt).*)$").unwrap();
+    let consonant = Regex::new(r"^(thr?|sch|ch|s?qu|rh|[bcdfghjklmnpqrstvwxyz])(.*)$").unwrap();
+    input
+        .split(" ")
+        .collect::<Vec<&str>>()
+        .into_iter()
+        .map(|word| {
+            let s1: String = vowel
+                .captures_iter(word)
+                .map(|c| c.extract())
+                .map(|(_, [first])| format!("{}ay", first))
+                .collect();
+            let s2: String = consonant
+                .captures_iter(word)
+                .map(|c| c.extract())
+                .map(|(_, [first, second])| format!("{}{}ay", second, first))
+                .collect();
+            if !s1.is_empty() {
+                s1
+            } else if !s2.is_empty() {
+                s2
+            } else {
+                word.to_string()
+            }
+        })
+        .collect::<Vec<String>>()
+        .join(" ")
 }
