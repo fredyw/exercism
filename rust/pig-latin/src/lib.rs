@@ -9,8 +9,6 @@ pub fn translate(input: &str) -> String {
             return format!("{}ay", first);
         }
         for (_, [first, second]) in consonant.captures_iter(word).map(|c| c.extract()) {
-            // let repl = format!("{}{}ay", second, first);
-            // return consonant.replace(word, repl).to_string();
             return format!("{}{}ay", second, first);
         }
     }
