@@ -12,7 +12,7 @@ pub fn lowest_price(books: &[u32]) -> u32 {
         n * (100 - discount) * 8
     }
 
-    fn lowest_price(book_counts: [i32; 5], memo: &mut HashMap<[i32; 5], u32>) -> Option<u32> {
+    fn lowest_price(book_counts: [i32; 5], memo: &mut HashMap<[i32; 5], u32>) -> u32 {
         fn calculate_price(
             group: u32,
             depth: u32,
@@ -25,7 +25,8 @@ pub fn lowest_price(books: &[u32]) -> u32 {
                 for i in indexes.iter() {
                     book_counts[i - 1] -= 1;
                 }
-                if let Some(p) = lowest_price(book_counts, memo) {
+                let p = lowest_price(book_counts, memo);
+                if p != u32::MAX {
                     *min_price = *min_price.min(&mut (p + price(group)));
                 }
                 return;
@@ -38,10 +39,10 @@ pub fn lowest_price(books: &[u32]) -> u32 {
         }
 
         if book_counts.iter().any(|count| *count < 0) {
-            return None;
+            return u32::MAX;
         }
         if let Some(price) = memo.get(&book_counts) {
-            return Some(*price);
+            return *price;
         }
         let mut min_price = u32::MAX;
         calculate_price(1, 1, &mut vec![], book_counts, memo, &mut min_price);
@@ -51,7 +52,7 @@ pub fn lowest_price(books: &[u32]) -> u32 {
         calculate_price(5, 5, &mut vec![], book_counts, memo, &mut min_price);
         let min_price = if min_price == u32::MAX { 0 } else { min_price };
         memo.insert(book_counts.clone(), min_price);
-        Some(min_price)
+        min_price
     }
 
     let mut book_counts = [0, 0, 0, 0, 0];
@@ -59,5 +60,5 @@ pub fn lowest_price(books: &[u32]) -> u32 {
         acc[*n as usize - 1] += 1;
         acc
     });
-    lowest_price(*book_counts, &mut HashMap::new()).unwrap_or(0)
+    lowest_price(*book_counts, &mut HashMap::new())
 }
