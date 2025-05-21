@@ -4,7 +4,15 @@ where
     I: Iterator,
     J: Iterator<Item = I::Item>,
 {
-    std::iter::from_fn(move || a.next().or_else(|| b.next()))
+    std::iter::from_fn(move || {
+        while let Some(item) = a.next() {
+            return Some(item);
+        }
+        while let Some(item) = b.next() {
+            return Some(item);
+        }
+        None
+    })
 }
 
 /// Combines all items in all nested iterators inside into one flattened iterator
