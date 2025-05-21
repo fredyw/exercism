@@ -13,20 +13,15 @@ where
     I: Iterator,
     I::Item: Iterator,
 {
-    let mut current: Option<I::Item> = None;
+    let mut current: Option<I::Item> = nested_iter.next();
     std::iter::from_fn(move || {
-        loop {
-            if let Some(item) = &mut current {
-                if let Some(i) = item.next() {
-                    return Some(i);
-                }
-                current = None;
-            } else if let Some(item) = nested_iter.next() {
-                current = Some(item);
-            } else {
-                return None;
+        while let Some(item) = &mut current {
+            if let Some(i) = item.next() {
+                return Some(i);
             }
+            current = nested_iter.next();
         }
+        None
     })
 }
 
