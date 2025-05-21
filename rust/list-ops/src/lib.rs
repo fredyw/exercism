@@ -4,8 +4,6 @@ where
     I: Iterator,
     J: Iterator<Item = I::Item>,
 {
-    // this empty iterator silences a compiler complaint that
-    // () doesn't implement Iterator
     std::iter::from_fn(move || a.next().or_else(|| b.next()))
 }
 
@@ -15,15 +13,20 @@ where
     I: Iterator,
     I::Item: Iterator,
 {
-    // this empty iterator silences a compiler complaint that
-    // () doesn't implement Iterator
+    let mut current: Option<I::Item> = None;
     std::iter::from_fn(move || {
-        while let Some(mut item) = nested_iter.next() {
-            while let Some(n) = item.next() {
-                return Some(n);
+        loop {
+            if let Some(item) = &mut current {
+                if let Some(i) = item.next() {
+                    return Some(i);
+                }
+                current = None;
+            } else if let Some(item) = nested_iter.next() {
+                current = Some(item);
+            } else {
+                return None;
             }
         }
-        None
     })
 }
 
@@ -33,8 +36,6 @@ where
     I: Iterator,
     F: Fn(&I::Item) -> bool,
 {
-    // this empty iterator silences a compiler complaint that
-    // () doesn't implement Iterator
     std::iter::from_fn(move || {
         while let Some(item) = iter.next() {
             if predicate(&item) {
@@ -59,8 +60,6 @@ where
     I: Iterator,
     F: Fn(I::Item) -> U,
 {
-    // this empty iterator silences a compiler complaint that
-    // () doesn't implement Iterator
     std::iter::from_fn(move || {
         while let Some(item) = iter.next() {
             return Some(function(item));
@@ -95,8 +94,6 @@ where
 
 /// Returns an iterator with all the original items, but in reverse order
 pub fn reverse<I: DoubleEndedIterator>(mut iter: I) -> impl Iterator<Item = I::Item> {
-    // this empty iterator silences a compiler complaint that
-    // () doesn't implement Iterator
     std::iter::from_fn(move || {
         while let Some(item) = iter.next_back() {
             return Some(item);
