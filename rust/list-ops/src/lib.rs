@@ -74,15 +74,23 @@ where
     I: Iterator,
     F: Fn(U, I::Item) -> U,
 {
-    todo!("starting with initial, fold (reduce) each iter item into the accumulator from the left")
+    let mut accumulator = initial;
+    while let Some(item) = iter.next() {
+        accumulator = function(accumulator, item);
+    }
+    accumulator
 }
 
-pub fn foldr<I, F, U>(mut _iter: I, _initial: U, _function: F) -> U
+pub fn foldr<I, F, U>(mut iter: I, initial: U, function: F) -> U
 where
     I: DoubleEndedIterator,
     F: Fn(U, I::Item) -> U,
 {
-    todo!("starting with initial, fold (reduce) each iter item into the accumulator from the right")
+    let mut accumulator = initial;
+    while let Some(item) = iter.next_back() {
+        accumulator = function(accumulator, item);
+    }
+    accumulator
 }
 
 /// Returns an iterator with all the original items, but in reverse order
