@@ -65,6 +65,30 @@ fn one_hundred() {
 }
 
 #[test]
+fn one_hundred_three() {
+    let input = 103;
+    let output = encode(input);
+    let expected = "one hundred three";
+    assert_eq!(output, expected);
+}
+
+#[test]
+fn one_thousand_three() {
+    let input = 1003;
+    let output = encode(input);
+    let expected = "one thousand three";
+    assert_eq!(output, expected);
+}
+
+#[test]
+fn twelve_thousand_three_hundred_forty_five() {
+    let input = 12345;
+    let output = encode(input);
+    let expected = "twelve thousand three hundred forty-five";
+    assert_eq!(output, expected);
+}
+
+#[test]
 fn one_hundred_twenty_three() {
     let input = 123;
     let output = encode(input);
@@ -77,6 +101,14 @@ fn two_hundred() {
     let input = 200;
     let output = encode(input);
     let expected = "two hundred";
+    assert_eq!(output, expected);
+}
+
+#[test]
+fn six_hundred_fifteen() {
+    let input = 615;
+    let output = encode(input);
+    let expected = "six hundred fifteen";
     assert_eq!(output, expected);
 }
 
@@ -125,6 +157,22 @@ fn one_billion() {
     let input = 1_000_000_000;
     let output = encode(input);
     let expected = "one billion";
+    assert_eq!(output, expected);
+}
+
+#[test]
+fn ten_billion() {
+    let input = 10_000_000_000;
+    let output = encode(input);
+    let expected = "ten billion";
+    assert_eq!(output, expected);
+}
+
+#[test]
+fn one_hundred_billion() {
+    let input = 100_000_000_000;
+    let output = encode(input);
+    let expected = "one hundred billion";
     assert_eq!(output, expected);
 }
 
