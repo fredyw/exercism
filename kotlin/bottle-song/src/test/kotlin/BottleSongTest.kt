@@ -1,11 +1,7 @@
-import org.junit.experimental.runners.Enclosed
-import org.junit.runner.RunWith
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class BottleSongTest {
-
     @Test
     fun `single verse`() {
         val expected = """
@@ -17,7 +13,6 @@ class BottleSongTest {
         assertEquals(expected, BottleSong.recite(10, 1))
     }
 
-    @Ignore
     @Test
     fun `last generic verse`() {
         val expected = """
@@ -29,7 +24,6 @@ class BottleSongTest {
         assertEquals(expected, BottleSong.recite(3, 1))
     }
 
-    @Ignore
     @Test
     fun `verse with 2 bottles`() {
         val expected =
@@ -45,7 +39,6 @@ class BottleSongTest {
 
     }
 
-    @Ignore
     @Test
     fun `verse with 1 bottle`() {
         val expected =
@@ -60,7 +53,6 @@ class BottleSongTest {
         )
     }
 
-    @Ignore
     @Test
     fun `multiple verses`() {
         val expected =
@@ -80,7 +72,6 @@ class BottleSongTest {
         )
     }
 
-    @Ignore
     @Test
     fun `last three verses`() {
         val expected =
@@ -105,7 +96,6 @@ class BottleSongTest {
         )
     }
 
-    @Ignore
     @Test
     fun `all verses`() {
         val expected =
