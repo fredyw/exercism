@@ -1,4 +1,3 @@
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException
@@ -23,7 +22,6 @@ class FlowerFieldBoardTest {
         assertEquals(expectedNumberedBoard, actualNumberedBoard)
     }
 
-    @Ignore
     @Test
     fun testInputBoardWithOneRowAndNoColumns() {
         val inputBoard = listOf("")
@@ -33,7 +31,6 @@ class FlowerFieldBoardTest {
         assertEquals(expectedNumberedBoard, actualNumberedBoard)
     }
 
-    @Ignore
     @Test
     fun testInputBoardWithNoFlowers() {
         val inputBoard = listOf(
@@ -53,7 +50,6 @@ class FlowerFieldBoardTest {
         assertEquals(expectedNumberedBoard, actualNumberedBoard)
     }
 
-    @Ignore
     @Test
     fun testInputBoardWithOnlyFlowers() {
         val inputBoard = listOf(
@@ -73,7 +69,6 @@ class FlowerFieldBoardTest {
         assertEquals(expectedNumberedBoard, actualNumberedBoard)
     }
 
-    @Ignore
     @Test
     fun testInputBoardWithSingleFlowerAtCenter() {
         val inputBoard = listOf(
@@ -93,7 +88,6 @@ class FlowerFieldBoardTest {
         assertEquals(expectedNumberedBoard, actualNumberedBoard)
     }
 
-    @Ignore
     @Test
     fun testInputBoardWithFlowersAroundPerimeter() {
         val inputBoard = listOf(
@@ -113,7 +107,6 @@ class FlowerFieldBoardTest {
         assertEquals(expectedNumberedBoard, actualNumberedBoard)
     }
 
-    @Ignore
     @Test
     fun testInputBoardWithSingleRowAndTwoFlowers() {
         val inputBoard = listOf(" * * ")
@@ -125,7 +118,6 @@ class FlowerFieldBoardTest {
         assertEquals(expectedNumberedBoard, actualNumberedBoard)
     }
 
-    @Ignore
     @Test
     fun testInputBoardWithSingleRowAndTwoFlowersAtEdges() {
         val inputBoard = listOf("*   *")
@@ -137,7 +129,6 @@ class FlowerFieldBoardTest {
         assertEquals(expectedNumberedBoard, actualNumberedBoard)
     }
 
-    @Ignore
     @Test
     fun testInputBoardWithSingleColumnAndTwoFlowers() {
         val inputBoard = listOf(
@@ -161,7 +152,6 @@ class FlowerFieldBoardTest {
         assertEquals(expectedNumberedBoard, actualNumberedBoard)
     }
 
-    @Ignore
     @Test
     fun testInputBoardWithSingleColumnAndTwoFlowersAtEdges() {
         val inputBoard = listOf(
@@ -185,7 +175,6 @@ class FlowerFieldBoardTest {
         assertEquals(expectedNumberedBoard, actualNumberedBoard)
     }
 
-    @Ignore
     @Test
     fun testInputBoardWithFlowersInCross() {
         val inputBoard = listOf(
@@ -209,7 +198,6 @@ class FlowerFieldBoardTest {
         assertEquals(expectedNumberedBoard, actualNumberedBoard)
     }
 
-    @Ignore
     @Test
     fun testLargeInputBoard() {
         val inputBoard = listOf(
