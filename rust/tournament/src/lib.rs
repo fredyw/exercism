@@ -1,7 +1,7 @@
 use std::cmp::Ordering;
 use std::collections::HashMap;
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 struct Team {
     name: String,
     matches: u32,
@@ -12,14 +12,10 @@ struct Team {
 }
 
 impl Team {
-    fn new(name: &str) -> Team {
+    fn new(name: String) -> Team {
         Team {
-            name: name.to_string(),
-            matches: 0,
-            wins: 0,
-            draws: 0,
-            losses: 0,
-            points: 0,
+            name,
+            ..Default::default()
         }
     }
 
@@ -50,7 +46,7 @@ pub fn tally(match_results: &str) -> String {
         let parts: Vec<&str> = line.split(';').collect();
         let team1 = teams
             .entry(parts[0].to_string())
-            .or_insert(Team::new(parts[0]));
+            .or_insert(Team::new(parts[0].to_string()));
         if parts[2] == "win" {
             team1.win();
         } else if parts[2] == "draw" {
@@ -60,7 +56,7 @@ pub fn tally(match_results: &str) -> String {
         }
         let team2 = teams
             .entry(parts[1].to_string())
-            .or_insert(Team::new(parts[1]));
+            .or_insert(Team::new(parts[1].to_string()));
         if parts[2] == "win" {
             team2.lose();
         } else if parts[2] == "draw" {
