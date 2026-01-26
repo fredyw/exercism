@@ -5,9 +5,9 @@ use std::collections::HashMap;
 struct Team {
     name: String,
     matches: u32,
-    won: u32,
-    drawn: u32,
-    lost: u32,
+    wins: u32,
+    draws: u32,
+    losses: u32,
     points: u32,
 }
 
@@ -16,11 +16,28 @@ impl Team {
         Team {
             name: name.to_string(),
             matches: 0,
-            won: 0,
-            drawn: 0,
-            lost: 0,
+            wins: 0,
+            draws: 0,
+            losses: 0,
             points: 0,
         }
+    }
+
+    fn win(&mut self) {
+        self.matches += 1;
+        self.wins += 1;
+        self.points += 3;
+    }
+
+    fn draw(&mut self) {
+        self.matches += 1;
+        self.draws += 1;
+        self.points += 1;
+    }
+
+    fn lose(&mut self) {
+        self.matches += 1;
+        self.losses += 1;
     }
 }
 
@@ -34,28 +51,22 @@ pub fn tally(match_results: &str) -> String {
         let team1 = teams
             .entry(parts[0].to_string())
             .or_insert(Team::new(parts[0]));
-        team1.matches += 1;
         if parts[2] == "win" {
-            team1.won += 1;
-            team1.points += 3;
+            team1.win();
         } else if parts[2] == "draw" {
-            team1.drawn += 1;
-            team1.points += 1;
+            team1.draw();
         } else {
-            team1.lost += 1;
+            team1.lose();
         }
         let team2 = teams
             .entry(parts[1].to_string())
             .or_insert(Team::new(parts[1]));
-        team2.matches += 1;
         if parts[2] == "win" {
-            team2.lost += 1;
+            team2.lose();
         } else if parts[2] == "draw" {
-            team2.drawn += 1;
-            team2.points += 1;
+            team2.draw();
         } else {
-            team2.won += 1;
-            team2.points += 3;
+            team2.win();
         }
     }
     let mut sorted_teams = teams.values().collect::<Vec<&Team>>();
@@ -75,7 +86,7 @@ pub fn tally(match_results: &str) -> String {
         .map(|team| {
             format!(
                 "{:<30} | {:>2} | {:>2} | {:>2} | {:>2} | {:>2}",
-                team.name, team.matches, team.won, team.drawn, team.lost, team.points
+                team.name, team.matches, team.wins, team.draws, team.losses, team.points
             )
         })
         .collect::<Vec<_>>()
